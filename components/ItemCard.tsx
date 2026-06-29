@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { MapPin, Calendar } from 'lucide-react'
 import StatusBadge from './StatusBadge'
 
@@ -35,12 +34,9 @@ export default function ItemCard({ item, index = 0 }: ItemCardProps) {
   })
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, delay: index * 0.1 }}
-      whileHover={{ y: -4 }}
-      className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer"
+    <div
+      className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer animate-fade-in-up"
+      style={{ animationDelay: `${index * 0.1}s` }}
     >
       <div className="h-48 bg-gray-100 relative overflow-hidden">
         {item.photo_url ? (
@@ -82,6 +78,6 @@ export default function ItemCard({ item, index = 0 }: ItemCardProps) {
           </span>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
