@@ -10,7 +10,6 @@ interface AuthContextType {
   loading: boolean
   signUp: (email: string, password: string, name: string, className?: string) => Promise<{ error: Error | null }>
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
-  signInWithOAuth: (provider: 'apple' | 'google') => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   updateProfile: (data: { name?: string; avatar_url?: string }) => Promise<{ error: Error | null }>
 }
@@ -58,7 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           name,
           class: className,
         },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     })
 
@@ -85,21 +83,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    })
-
-    return { error }
-  }
-
-  const signInWithOAuth = async (provider: 'apple' | 'google') => {
-    if (!isSupabaseConfigured() || !supabase) {
-      return { error: new Error('Supabase não configurado') }
-    }
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
     })
 
     return { error }
@@ -141,7 +124,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       loading,
       signUp,
       signIn,
-      signInWithOAuth,
       signOut,
       updateProfile,
     }}>

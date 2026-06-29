@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Package, Mail, User, LogOut, Settings, Award, Shield, Heart, BookOpen, GraduationCap } from 'lucide-react'
+import { Package, Mail, User, LogOut, Settings, Award, Shield, Heart, BookOpen, GraduationCap, Shirt } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 import ItemCard from '@/components/ItemCard'
