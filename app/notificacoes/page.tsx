@@ -3,7 +3,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bell, BellOff, Mail } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 interface Notification {
   id: string
@@ -25,10 +27,16 @@ export default function NotificacoesPage() {
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
+    if (!isSupabaseConfigured()) {
+      setNotifications([])
+      setLoading(false)
+      setSearched(true)
+      return
+    }
     setLoading(true)
     setSearched(true)
 
-    const { data } = await supabase
+    const { data } = await supabase!
       .from('notifications')
       .select('*, items(title, status)')
       .order('created_at', { ascending: false })
@@ -38,7 +46,7 @@ export default function NotificacoesPage() {
   }
 
   async function markAsRead(id: string) {
-    await supabase
+    await supabase!
       .from('notifications')
       .update({ read: true })
       .eq('id', id)

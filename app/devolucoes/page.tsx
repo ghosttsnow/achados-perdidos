@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle, Calendar, MapPin, User } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -26,7 +28,12 @@ export default function DevolucoesPage() {
   }, [])
 
   async function fetchDevolucoes() {
-    const { data } = await supabase
+    if (!isSupabaseConfigured()) {
+      setItems([])
+      setLoading(false)
+      return
+    }
+    const { data } = await supabase!
       .from('items')
       .select('*')
       .eq('status', 'devolvido')

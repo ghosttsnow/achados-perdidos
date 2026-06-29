@@ -3,7 +3,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Send, Upload, CheckCircle, Shirt, Laptop, BookOpen, Package } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+
+export const dynamic = 'force-dynamic'
 
 const categories = [
   { value: 'uniforme', label: 'Uniforme', icon: Shirt },
@@ -38,25 +40,29 @@ export default function ReportarPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    if (!isSupabaseConfigured()) {
+      alert('Configuração do Supabase não encontrada. Verifique as variáveis de ambiente.')
+      return
+    }
     setSubmitting(true)
 
     let photoUrl = null
 
     if (photo) {
       const fileName = `${Date.now()}-${photo.name}`
-      const { data: uploadData } = await supabase.storage
+      const { data: uploadData } = await supabase!.storage
         .from('photos')
         .upload(fileName, photo)
 
       if (uploadData) {
-        const { data: urlData } = supabase.storage
+        const { data: urlData } = supabase!.storage
           .from('photos')
           .getPublicUrl(uploadData.path)
         photoUrl = urlData.publicUrl
       }
     }
 
-    const { error } = await supabase.from('items').insert({
+    const { error } = await supabase!.from('items').insert({
       title: formData.title,
       description: formData.description,
       category: formData.category,

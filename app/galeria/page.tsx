@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Search } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import ItemCard from '@/components/ItemCard'
 import CategoryFilter from '@/components/CategoryFilter'
+
+export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -30,8 +32,13 @@ export default function GaleriaPage() {
   }, [category])
 
   async function fetchItems() {
+    if (!isSupabaseConfigured()) {
+      setItems([])
+      setLoading(false)
+      return
+    }
     setLoading(true)
-    let query = supabase
+    let query = supabase!
       .from('items')
       .select('*')
       .order('created_at', { ascending: false })

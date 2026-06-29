@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { CheckCircle, Package, LogOut } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
+
+export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -31,8 +33,13 @@ export default function AdminPage() {
   }, [filter])
 
   async function fetchItems() {
+    if (!isSupabaseConfigured()) {
+      setItems([])
+      setLoading(false)
+      return
+    }
     setLoading(true)
-    let query = supabase
+    let query = supabase!
       .from('items')
       .select('*')
       .order('created_at', { ascending: false })
@@ -47,7 +54,9 @@ export default function AdminPage() {
   }
 
   async function updateStatus(id: string, newStatus: string) {
-    const { error } = await supabase
+    if (!isSupabaseConfigured()) return
+    
+    const { error } = await supabase!
       .from('items')
       .update({ status: newStatus })
       .eq('id', id)
@@ -56,7 +65,7 @@ export default function AdminPage() {
       if (newStatus === 'encontrado') {
         const item = items.find(i => i.id === id)
         if (item) {
-          await supabase.from('notifications').insert({
+          await supabase!.from('notifications').insert({
             item_id: id,
             message: `Seu "${item.title}" foi encontrado! Procute a coordenação para buscar.`,
             read: false,

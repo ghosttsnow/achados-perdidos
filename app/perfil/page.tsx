@@ -3,8 +3,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, Package } from 'lucide-react'
-import { supabase } from '@/lib/supabase'
+import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import ItemCard from '@/components/ItemCard'
+
+export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -26,10 +28,16 @@ export default function PerfilPage() {
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
+    if (!isSupabaseConfigured()) {
+      setItems([])
+      setLoading(false)
+      setSearched(true)
+      return
+    }
     setLoading(true)
     setSearched(true)
 
-    const { data } = await supabase
+    const { data } = await supabase!
       .from('items')
       .select('*')
       .eq('contact', email)
