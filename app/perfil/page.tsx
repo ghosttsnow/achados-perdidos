@@ -130,11 +130,8 @@ export default function PerfilPage() {
 
       <main className="max-w-4xl mx-auto px-4 py-8">
         {/* Profile Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
+        <div
+          className="mb-8 animate-fade-in-up"
         >
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-6">
@@ -169,27 +166,23 @@ export default function PerfilPage() {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Stats Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-fade-in-up"
+          style={{ animationDelay: '0.1s' }}
         >
           <StatCard icon={Package} label="Total" value={items.length} color="from-blue-500 to-blue-600" />
           <StatCard icon={Award} label="Perdidos" value={items.filter(i => i.status === 'perdido').length} color="from-orange-500 to-orange-600" />
           <StatCard icon={Shield} label="Encontrados" value={items.filter(i => i.status === 'encontrado').length} color="from-green-500 to-green-600" />
           <StatCard icon={Award} label="Devolvidos" value={items.filter(i => i.status === 'devolvido').length} color="from-blue-500 to-blue-600" />
-        </motion.div>
+        </div>
 
         {/* Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+        <div
+          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in-up"
+          style={{ animationDelay: '0.2s' }}
         >
           <div className="border-b border-gray-100">
             <nav className="flex -mb-px" aria-label="Tabs">
@@ -226,12 +219,10 @@ export default function PerfilPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {items.map((item, i) => (
-                  <motion.div
+                  <div
                     key={item.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: i * 0.05 }}
-                    className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300"
+                    className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-in-up"
+                    style={{ animationDelay: `${i * 0.05}s` }}
                   >
                     <div className="relative h-40 bg-gray-50 overflow-hidden">
                       {item.photo_url ? (
@@ -269,14 +260,14 @@ export default function PerfilPage() {
                           <Award className="w-3 h-3" />
                           {new Date(item.created_at).toLocaleDateString('pt-BR')}
                         </span>
-                      </div>
-                    </div>
-                  </motion.div>
+</div>
+          </div>
+        </div>
                 ))}
               </div>
             )}
           </div>
-        </motion.div>
+        </div>
       </main>
     </div>
   )
