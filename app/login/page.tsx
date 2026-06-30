@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Mail, Lock, Eye, EyeOff, User, GraduationCap, BookOpen } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, User, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
 
@@ -138,8 +138,8 @@ export default function LoginPage() {
 
           {/* School info */}
           <div className="mt-8 p-4 rounded-xl text-center animate-fade-in-up" style={{ background: 'linear-gradient(135deg, #eef2ff 0%, #f0fdf4 100%)', border: '1px solid #e0e7ff' }}>
-            <GraduationCap className="w-5 h-5 mx-auto mb-2" style={{ color: '#1e3a5f' }} />
-            <p className="text-sm text-gray-600">Sistema de Achados e Perdidos da Escola</p>
+            <BookOpen className="w-5 h-5 mx-auto mb-2" style={{ color: '#1e3a5f' }} />
+            <p className="text-sm text-gray-600">Colégio Batista Nova Betânia</p>
           </div>
         </div>
       </div>

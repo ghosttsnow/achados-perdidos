@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { getItems } from '@/lib/storage'
 import ItemCard from '@/components/ItemCard'
 import CategoryFilter from '@/components/CategoryFilter'
-
-export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -30,24 +28,12 @@ export default function GaleriaPage() {
     fetchItems()
   }, [category])
 
-  async function fetchItems() {
-    if (!isSupabaseConfigured()) {
-      setItems([])
-      setLoading(false)
-      return
-    }
+  function fetchItems() {
     setLoading(true)
-    let query = supabase!
-      .from('items')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (category !== 'todos') {
-      query = query.eq('category', category)
-    }
-
-    const { data } = await query
-    setItems(data || [])
+    const all = getItems().sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    setItems(category === 'todos' ? all : all.filter(i => i.category === category))
     setLoading(false)
   }
 
@@ -95,7 +81,7 @@ export default function GaleriaPage() {
           </div>
         ) : filteredItems.length === 0 ? (
           <div className="text-center py-16 animate-fade-in-up">
-            <Search className="w-16 h-16 h-16 text-gray-300 mx-auto mb-4" />
+            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum item encontrado</h3>
             <p className="text-gray-500">
               {search ? 'Tente buscar com outras palavras' : 'Ainda não há itens nesta categoria'}

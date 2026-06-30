@@ -1,131 +1,108 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
-import { User, Session } from '@supabase/supabase-js'
+import { findUserByEmail, createUser, getSession, saveSession, clearSession } from '@/lib/storage'
+import { User } from '@supabase/supabase-js'
 
 interface AuthContextType {
   user: User | null
-  session: Session | null
+  session: any
   loading: boolean
   signUp: (email: string, password: string, name: string, className?: string) => Promise<{ error: Error | null }>
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
-  updateProfile: (data: { name?: string; avatar_url?: string }) => Promise<{ error: Error | null }>
+  updateProfile: (data: { name?: string }) => Promise<{ error: Error | null }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!isSupabaseConfigured()) {
-      setLoading(false)
-      return
+    const stored = getSession()
+    if (stored) {
+      setUser({
+        id: stored.id,
+        email: stored.email,
+        user_metadata: { name: stored.name, class: stored.className },
+        app_metadata: {},
+        aud: 'authenticated',
+        created_at: stored.createdAt,
+      } as User)
     }
-
-    // Get initial session
-    supabase!.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase!.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
-
-    return () => subscription.unsubscribe()
+    setLoading(false)
   }, [])
 
   const signUp = async (email: string, password: string, name: string, className?: string) => {
-    if (!isSupabaseConfigured() || !supabase) {
-      return { error: new Error('Supabase não configurado') }
+    try {
+      const exists = findUserByEmail(email)
+      if (exists) {
+        return { error: new Error('Este email já está cadastrado') }
+      }
+      const newUser = createUser(email, password, name, className)
+      saveSession(newUser)
+      setUser({
+        id: newUser.id,
+        email: newUser.email,
+        user_metadata: { name: newUser.name, class: newUser.className },
+        app_metadata: {},
+        aud: 'authenticated',
+        created_at: newUser.createdAt,
+      } as User)
+      return { error: null }
+    } catch {
+      return { error: new Error('Erro ao criar conta. Tente novamente.') }
     }
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          name,
-          class: className,
-        },
-      },
-    })
-
-    if (error) return { error }
-
-    // Create user profile in users table
-    if (data.user) {
-      await supabase.from('users').insert({
-        id: data.user.id,
-        email: data.user.email,
-        name,
-        class: className,
-      })
-    }
-
-    return { error: null }
   }
 
   const signIn = async (email: string, password: string) => {
-    if (!isSupabaseConfigured() || !supabase) {
-      return { error: new Error('Supabase não configurado') }
+    const found = findUserByEmail(email)
+    if (!found) {
+      return { error: new Error('Email não encontrado. Verifique ou crie uma conta.') }
     }
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    return { error }
+    if (found.password !== password) {
+      return { error: new Error('Senha incorreta. Tente novamente.') }
+    }
+    saveSession(found)
+    setUser({
+      id: found.id,
+      email: found.email,
+      user_metadata: { name: found.name, class: found.className },
+      app_metadata: {},
+      aud: 'authenticated',
+      created_at: found.createdAt,
+    } as User)
+    return { error: null }
   }
 
   const signOut = async () => {
-    if (!supabase) return
-    await supabase.auth.signOut()
+    clearSession()
+    setUser(null)
   }
 
-  const updateProfile = async (data: { name?: string; avatar_url?: string }) => {
-    if (!supabase) return { error: new Error('Supabase não configurado') }
+  const updateProfile = async (data: { name?: string }) => {
+    const stored = getSession()
+    if (!stored) return { error: new Error('Nenhum usuário logado') }
 
-    const { error } = await supabase.auth.updateUser({
-      data: {
-        name: data.name,
-        avatar_url: data.avatar_url,
-      },
-    })
-
-    // Also update users table if name changed
-    if (data.name && !error) {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase.from('users').upsert({
-          id: user.id,
-          name: data.name,
-        })
-      }
+    const users = JSON.parse(localStorage.getItem('cbn_users') || '[]')
+    const idx = users.findIndex((u: any) => u.id === stored.id)
+    if (idx >= 0) {
+      if (data.name) users[idx].name = data.name
+      localStorage.setItem('cbn_users', JSON.stringify(users))
     }
 
-    return { error }
+    const updated = { ...stored, ...data }
+    saveSession(updated)
+    setUser(prev => prev ? { ...prev, user_metadata: { ...prev.user_metadata, ...data } } : null)
+    return { error: null }
   }
 
   return (
     <AuthContext.Provider value={{
-      user,
-      session,
-      loading,
-      signUp,
-      signIn,
-      signOut,
-      updateProfile,
+      user, session: user ? { user } : null, loading,
+      signUp, signIn, signOut, updateProfile,
     }}>
       {children}
     </AuthContext.Provider>
@@ -134,8 +111,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth deve ser usado dentro de AuthProvider')
-  }
+  if (!context) throw new Error('useAuth deve ser usado dentro de AuthProvider')
   return context
 }

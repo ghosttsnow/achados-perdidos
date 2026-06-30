@@ -1,12 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Package, LogOut, Settings, Award, Shield, Heart, BookOpen, GraduationCap, Shirt } from 'lucide-react'
+import { Package, LogOut, Award, Shield, BookOpen, GraduationCap, Shirt } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
-
-export const dynamic = 'force-dynamic'
+import { getItems } from '@/lib/storage'
 
 interface Item {
   id: string
@@ -25,19 +23,14 @@ export default function PerfilPage() {
   const [items, setItems] = useState<Item[]>([])
 
   useEffect(() => {
-    if (user) {
-      fetchUserItems()
-    }
+    if (user) fetchUserItems()
   }, [user])
 
-  async function fetchUserItems() {
-    if (!isSupabaseConfigured()) return
-    const { data } = await supabase!
-      .from('items')
-      .select('*')
-      .eq('contact', user?.email)
-      .order('created_at', { ascending: false })
-    setItems(data || [])
+  function fetchUserItems() {
+    const all = getItems().filter(i => i.contact === user?.email).sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    setItems(all)
   }
 
   async function handleSignOut() {
@@ -87,42 +80,8 @@ export default function PerfilPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-2 font-bold text-xl" style={{ color: '#1e3a5f' }}>
-              <BookOpen className="w-7 h-7" />
-              Achados & Perdidos
-            </Link>
-            {user ? (
-              <div className="flex items-center gap-4">
-                <Link href="/reportar" className="text-sm font-medium hover:text-blue-600 transition-colors" style={{ color: '#1e3a5f' }}>
-                  Reportar Item
-                </Link>
-                <Link href="/galeria" className="text-sm font-medium hover:text-blue-600 transition-colors" style={{ color: '#1e3a5f' }}>
-                  Galeria
-                </Link>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Link href="/login" className="text-sm font-medium hover:text-blue-600 transition-colors" style={{ color: '#1e3a5f' }}>
-                  Entrar
-                </Link>
-                <Link href="/cadastro" className="px-4 py-2 rounded-xl font-semibold text-white text-sm transition-all duration-200 hover:scale-[1.02]" style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 100%)' }}>
-                  Cadastrar
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-4xl mx-auto px-4 py-8">
-        {/* Profile Header */}
-        <div
-          className="mb-8 animate-fade-in-up"
-        >
+        <div className="mb-8 animate-fade-in-up">
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-6">
               <div className="flex items-center gap-6">
@@ -141,52 +100,39 @@ export default function PerfilPage() {
                       <Shield className="w-3 h-3" />
                       Conta verificada
                     </span>
+                    {user?.user_metadata?.class && (
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 flex items-center gap-1">
+                        <GraduationCap className="w-3 h-3" />
+                        {String(user.user_metadata.class)}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleSignOut}
-                  className="px-4 py-2 rounded-xl font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-all duration-200 flex items-center gap-2"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sair
-                </button>
-              </div>
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-2 rounded-xl font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-all duration-200 flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sair
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-fade-in-up"
-          style={{ animationDelay: '0.1s' }}
-        >
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <StatCard icon={Package} label="Total" value={items.length} color="from-blue-500 to-blue-600" />
           <StatCard icon={Award} label="Perdidos" value={items.filter(i => i.status === 'perdido').length} color="from-orange-500 to-orange-600" />
           <StatCard icon={Shield} label="Encontrados" value={items.filter(i => i.status === 'encontrado').length} color="from-green-500 to-green-600" />
           <StatCard icon={Award} label="Devolvidos" value={items.filter(i => i.status === 'devolvido').length} color="from-blue-500 to-blue-600" />
         </div>
 
-        {/* Tabs */}
-        <div
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in-up"
-          style={{ animationDelay: '0.2s' }}
-        >
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <div className="border-b border-gray-100">
             <nav className="flex -mb-px" aria-label="Tabs">
               <button className="flex items-center gap-2 px-6 py-4 border-b-2 font-medium text-sm transition-all duration-200" style={{ borderColor: '#1e3a5f', color: '#1e3a5f' }}>
                 <Package className="w-4 h-4" />
                 Meus Itens
-              </button>
-              <button className="flex items-center gap-2 px-6 py-4 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-200 transition-all duration-200" style={{ color: '#1e3a5f' }}>
-                <Heart className="w-4 h-4" />
-                Favoritos
-              </button>
-              <button className="flex items-center gap-2 px-6 py-4 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-200 transition-all duration-200" style={{ color: '#1e3a5f' }}>
-                <Settings className="w-4 h-4" />
-                Configurações
               </button>
             </nav>
           </div>
@@ -216,11 +162,7 @@ export default function PerfilPage() {
                   >
                     <div className="relative h-40 bg-gray-50 overflow-hidden">
                       {item.photo_url ? (
-                        <img
-                          src={item.photo_url}
-                          alt={item.title}
-                          className="w-full h-full object-cover"
-                        />
+                        <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                           {categoryIcons[item.category] || <Package className="w-10 h-10" />}
@@ -265,10 +207,7 @@ export default function PerfilPage() {
 
 function StatCard({ icon: Icon, label, value, color }: { icon: React.ComponentType<{ className?: string }>; label: string; value: number; color: string }) {
   return (
-    <div
-      className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in-up"
-      style={{ animationDelay: '0.3s' }}
-    >
+    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-gray-600 mb-1">{label}</p>

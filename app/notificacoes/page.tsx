@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { Bell, BellOff, Mail } from 'lucide-react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
-
-export const dynamic = 'force-dynamic'
+import { getNotifications, markNotificationRead } from '@/lib/storage'
 
 interface Notification {
   id: string
@@ -12,10 +10,6 @@ interface Notification {
   read: boolean
   created_at: string
   item_id: string
-  items?: {
-    title: string
-    status: string
-  }
 }
 
 export default function NotificacoesPage() {
@@ -24,32 +18,20 @@ export default function NotificacoesPage() {
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
 
-  async function handleSearch(e: React.FormEvent) {
+  function handleSearch(e: React.FormEvent) {
     e.preventDefault()
-    if (!isSupabaseConfigured()) {
-      setNotifications([])
-      setLoading(false)
-      setSearched(true)
-      return
-    }
     setLoading(true)
     setSearched(true)
 
-    const { data } = await supabase!
-      .from('notifications')
-      .select('*, items(title, status)')
-      .order('created_at', { ascending: false })
-
-    setNotifications(data || [])
+    const all = getNotifications().sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    setNotifications(all)
     setLoading(false)
   }
 
-  async function markAsRead(id: string) {
-    await supabase!
-      .from('notifications')
-      .update({ read: true })
-      .eq('id', id)
-
+  function handleMarkRead(id: string) {
+    markNotificationRead(id)
     setNotifications(notifications.map(n =>
       n.id === id ? { ...n, read: true } : n
     ))
@@ -70,7 +52,7 @@ export default function NotificacoesPage() {
             <div className="flex-1 relative">
               <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
-                type="email"
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -102,7 +84,7 @@ export default function NotificacoesPage() {
                 {notifications.map((notif) => (
                   <div
                     key={notif.id}
-                    onClick={() => !notif.read && markAsRead(notif.id)}
+                    onClick={() => !notif.read && handleMarkRead(notif.id)}
                     className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 animate-fade-in-up ${
                       notif.read
                         ? 'bg-white border-gray-200'

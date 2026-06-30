@@ -3,11 +3,9 @@
 import { useEffect, useState } from 'react'
 import { Search, Plus, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { getItems } from '@/lib/storage'
 import ItemCard from '@/components/ItemCard'
 import CategoryFilter from '@/components/CategoryFilter'
-
-export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -30,25 +28,12 @@ export default function Home() {
     fetchItems()
   }, [category])
 
-  async function fetchItems() {
-    if (!isSupabaseConfigured()) {
-      setItems([])
-      setLoading(false)
-      return
-    }
+  function fetchItems() {
     setLoading(true)
-    let query = supabase!
-      .from('items')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(9)
-
-    if (category !== 'todos') {
-      query = query.eq('category', category)
-    }
-
-    const { data } = await query
-    setItems(data || [])
+    const all = getItems().sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    ).slice(0, 9)
+    setItems(category === 'todos' ? all : all.filter(i => i.category === category))
     setLoading(false)
   }
 

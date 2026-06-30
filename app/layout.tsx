@@ -4,8 +4,8 @@ import Navbar from '@/components/Navbar'
 import { AuthProvider } from '@/context/AuthContext'
 
 export const metadata: Metadata = {
-  title: 'Achados e Perdidos',
-  description: 'Encontrou? Perdeu? A gente ajuda.',
+  title: 'Achados e Perdidos - Colégio Batista Nova Betânia',
+  description: 'Sistema de Achados e Perdidos do Colégio Batista Nova Betânia.',
 }
 
 export default function RootLayout({

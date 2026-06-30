@@ -2,9 +2,8 @@
 
 import { useState } from 'react'
 import { Send, Upload, Shirt, Laptop, BookOpen, Package } from 'lucide-react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
-
-export const dynamic = 'force-dynamic'
+import { createItem } from '@/lib/storage'
+import Link from 'next/link'
 
 const categories = [
   { value: 'uniforme', label: 'Uniforme', icon: Shirt },
@@ -22,7 +21,6 @@ export default function ReportarPage() {
     reported_by: '',
     contact: '',
   })
-  const [photo, setPhoto] = useState<File | null>(null)
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -30,71 +28,48 @@ export default function ReportarPage() {
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (file) {
-      setPhoto(file)
       const reader = new FileReader()
       reader.onloadend = () => setPhotoPreview(reader.result as string)
       reader.readAsDataURL(file)
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!isSupabaseConfigured()) {
-      alert('Configuração do Supabase não encontrada. Verifique as variáveis de ambiente.')
-      return
-    }
     setSubmitting(true)
 
-    let photoUrl = null
-
-    if (photo) {
-      const fileName = `${Date.now()}-${photo.name}`
-      const { data: uploadData } = await supabase!.storage
-        .from('photos')
-        .upload(fileName, photo)
-
-      if (uploadData) {
-        const { data: urlData } = supabase!.storage
-          .from('photos')
-          .getPublicUrl(uploadData.path)
-        photoUrl = urlData.publicUrl
-      }
-    }
-
-    const { error } = await supabase!.from('items').insert({
+    createItem({
       title: formData.title,
       description: formData.description,
       category: formData.category,
       location: formData.location,
       reported_by: formData.reported_by,
       contact: formData.contact,
-      photo_url: photoUrl,
+      photo_url: photoPreview,
       status: 'perdido',
     })
 
-    if (!error) {
-      setSuccess(true)
-    }
+    setSuccess(true)
     setSubmitting(false)
   }
 
   if (success) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-center animate-fade-fade-in-up">
-        <div className="text-6xl text-green-500 mb-6">✓</div>
+      <div className="max-w-lg mx-auto px-4 py-16 text-center">
+        <div className="text-6xl text-green-500 mb-6 animate-fade-in-up">&#10003;</div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           Item reportado com sucesso!
         </h2>
         <p className="text-gray-600 mb-8 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           Quando alguém encontrar, você será notificado.
         </p>
-        <a
+        <Link
           href="/"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium animate-fade-in-up"
           style={{ backgroundColor: '#1e3a5f', animationDelay: '0.4s' }}
         >
           Voltar ao início
-        </a>
+        </Link>
       </div>
     )
   }
@@ -177,7 +152,7 @@ export default function ReportarPage() {
               <label className="flex-1 flex items-center justify-center gap-2 px-4 py-8 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition-all duration-200">
                 <Upload className="w-5 h-5 text-gray-400" />
                 <span className="text-sm text-gray-500">
-                  {photo ? photo.name : 'Clique para adicionar foto'}
+                  {photoPreview ? 'Foto adicionada' : 'Clique para adicionar foto'}
                 </span>
                 <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
               </label>
@@ -206,7 +181,7 @@ export default function ReportarPage() {
               required
               value={formData.contact}
               onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-              placeholder="(11) 99999-9999 ou email@escola.com"
+              placeholder="(11) 99999-9999 ou email@colegio.com"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
             />
           </div>

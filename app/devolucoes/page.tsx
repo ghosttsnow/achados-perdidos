@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { CheckCircle, Calendar, MapPin, User } from 'lucide-react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
-
-export const dynamic = 'force-dynamic'
+import { getItems } from '@/lib/storage'
 
 interface Item {
   id: string
@@ -26,19 +24,11 @@ export default function DevolucoesPage() {
     fetchDevolucoes()
   }, [])
 
-  async function fetchDevolucoes() {
-    if (!isSupabaseConfigured()) {
-      setItems([])
-      setLoading(false)
-      return
-    }
-    const { data } = await supabase!
-      .from('items')
-      .select('*')
-      .eq('status', 'devolvido')
-      .order('created_at', { ascending: false })
-
-    setItems(data || [])
+  function fetchDevolucoes() {
+    const all = getItems().filter(i => i.status === 'devolvido').sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    setItems(all)
     setLoading(false)
   }
 

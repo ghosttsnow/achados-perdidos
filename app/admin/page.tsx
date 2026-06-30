@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { CheckCircle, Package, LogOut } from 'lucide-react'
-import { supabase, isSupabaseConfigured } from '@/lib/supabase'
+import { getItems, updateItemStatus, createNotification } from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
-
-export const dynamic = 'force-dynamic'
 
 interface Item {
   id: string
@@ -31,48 +29,28 @@ export default function AdminPage() {
     fetchItems()
   }, [filter])
 
-  async function fetchItems() {
-    if (!isSupabaseConfigured()) {
-      setItems([])
-      setLoading(false)
-      return
-    }
+  function fetchItems() {
     setLoading(true)
-    let query = supabase!
-      .from('items')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (filter !== 'todos') {
-      query = query.eq('status', filter)
-    }
-
-    const { data } = await query
-    setItems(data || [])
+    const all = getItems().sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+    setItems(filter === 'todos' ? all : all.filter(i => i.status === filter))
     setLoading(false)
   }
 
-  async function updateStatus(id: string, newStatus: string) {
-    if (!isSupabaseConfigured()) return
-    
-    const { error } = await supabase!
-      .from('items')
-      .update({ status: newStatus })
-      .eq('id', id)
-
-    if (!error) {
-      if (newStatus === 'encontrado') {
-        const item = items.find(i => i.id === id)
-        if (item) {
-          await supabase!.from('notifications').insert({
-            item_id: id,
-            message: `Seu "${item.title}" foi encontrado! Procute a coordenação para buscar.`,
-            read: false,
-          })
-        }
+  function handleUpdateStatus(id: string, newStatus: 'encontrado' | 'devolvido') {
+    updateItemStatus(id, newStatus)
+    if (newStatus === 'encontrado') {
+      const item = items.find(i => i.id === id)
+      if (item) {
+        createNotification({
+          item_id: id,
+          message: `Seu "${item.title}" foi encontrado! Procure a coordenação para buscar.`,
+          read: false,
+        })
       }
-      fetchItems()
     }
+    fetchItems()
   }
 
   function handleLogout() {
@@ -192,7 +170,7 @@ export default function AdminPage() {
                   <div className="flex md:flex-col gap-2 flex-shrink-0">
                     {item.status === 'perdido' && (
                       <button
-                        onClick={() => updateStatus(item.id, 'encontrado')}
+                        onClick={() => handleUpdateStatus(item.id, 'encontrado')}
                         className="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg hover:bg-green-100 transition-all duration-200 text-sm font-medium"
                       >
                         <CheckCircle className="w-4 h-4" />
@@ -201,7 +179,7 @@ export default function AdminPage() {
                     )}
                     {item.status === 'encontrado' && (
                       <button
-                        onClick={() => updateStatus(item.id, 'devolvido')}
+                        onClick={() => handleUpdateStatus(item.id, 'devolvido')}
                         className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-all duration-200 text-sm font-medium"
                       >
                         <CheckCircle className="w-4 h-4" />
