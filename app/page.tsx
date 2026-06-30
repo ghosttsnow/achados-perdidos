@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { Search, Plus, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
@@ -55,12 +54,7 @@ export default function Home() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-center mb-12"
-      >
+      <section className="text-center mb-12 animate-fade-in-up">
         <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#1e3a5f' }}>
           Encontrou? Perdeu?
         </h1>
@@ -87,17 +81,12 @@ export default function Home() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="mb-8"
-      >
+      <section className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Itens recentes</h2>
         <CategoryFilter selected={category} onChange={setCategory} />
-      </motion.section>
+      </section>
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -113,11 +102,7 @@ export default function Home() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-16"
-        >
+        <div className="text-center py-16 animate-fade-in-up">
           <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum item ainda</h3>
           <p className="text-gray-500 mb-6">Seja o primeiro a reportar um item perdido!</p>
@@ -129,7 +114,7 @@ export default function Home() {
             <Plus className="w-5 h-5" />
             Reportar item
           </Link>
-        </motion.div>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item, i) => (

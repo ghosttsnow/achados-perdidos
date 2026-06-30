@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { CheckCircle, Package, LogOut } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
@@ -90,11 +89,7 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-fade-in-up">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold" style={{ color: '#1e3a5f' }}>
@@ -164,13 +159,10 @@ export default function AdminPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {items.map((item, i) => (
-              <motion.div
+            {items.map((item) => (
+              <div
                 key={item.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2, delay: i * 0.05 }}
-                className="bg-white rounded-xl border border-gray-200 p-4 md:p-6 hover:shadow-md transition-all duration-200"
+                className="bg-white rounded-xl border border-gray-200 p-4 md:p-6 hover:shadow-md transition-all duration-200 animate-fade-in-up"
               >
                 <div className="flex flex-col md:flex-row gap-4">
                   <div className="w-full md:w-20 h-32 md:h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
@@ -218,11 +210,11 @@ export default function AdminPage() {
                     )}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   )
 }

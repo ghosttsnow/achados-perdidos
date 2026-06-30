@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { Send, Upload, CheckCircle, Shirt, Laptop, BookOpen, Package } from 'lucide-react'
+import { Send, Upload, Shirt, Laptop, BookOpen, Package } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
@@ -81,51 +80,28 @@ export default function ReportarPage() {
 
   if (success) {
     return (
-      <div className="max-w-lg mx-auto px-4 py-16 text-center">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-        >
-          <CheckCircle className="w-20 h-20 text-green-500 mx-auto mb-6" />
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-2xl font-bold text-gray-900 mb-4"
-        >
+      <div className="max-w-lg mx-auto px-4 py-16 text-center animate-fade-fade-in-up">
+        <div className="text-6xl text-green-500 mb-6">✓</div>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           Item reportado com sucesso!
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-gray-600 mb-8"
-        >
+        </h2>
+        <p className="text-gray-600 mb-8 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           Quando alguém encontrar, você será notificado.
-        </motion.p>
-        <motion.a
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
+        </p>
+        <a
           href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium"
-          style={{ backgroundColor: '#1e3a5f' }}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium animate-fade-in-up"
+          style={{ backgroundColor: '#1e3a5f', animationDelay: '0.4s' }}
         >
           Voltar ao início
-        </motion.a>
+        </a>
       </div>
     )
   }
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-fade-in-up">
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#1e3a5f' }}>
           Reportar item perdido
         </h1>
@@ -251,7 +227,7 @@ export default function ReportarPage() {
             )}
           </button>
         </form>
-      </motion.div>
+      </div>
     </div>
   )
 }

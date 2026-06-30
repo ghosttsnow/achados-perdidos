@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { Bell, BellOff, Mail } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
@@ -58,11 +57,7 @@ export default function NotificacoesPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-fade-in-up">
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#1e3a5f' }}>
           Notificações
         </h1>
@@ -104,45 +99,39 @@ export default function NotificacoesPage() {
               </div>
             ) : (
               <div className="space-y-3">
-                <AnimatePresence>
-                  {notifications.map((notif, i) => (
-                    <motion.div
-                      key={notif.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.3, delay: i * 0.05 }}
-                      onClick={() => !notif.read && markAsRead(notif.id)}
-                      className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 ${
-                        notif.read
-                          ? 'bg-white border-gray-200'
-                          : 'bg-blue-50 border-blue-200 hover:bg-blue-100'
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className={`p-2 rounded-full ${notif.read ? 'bg-gray-100' : 'bg-blue-100'}`}>
-                          <Bell className={`w-4 h-4 ${notif.read ? 'text-gray-500' : 'text-blue-600'}`} />
-                        </div>
-                        <div className="flex-1">
-                          <p className={`text-sm ${notif.read ? 'text-gray-600' : 'text-gray-900 font-medium'}`}>
-                            {notif.message}
-                          </p>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {new Date(notif.created_at).toLocaleString('pt-BR')}
-                          </p>
-                        </div>
-                        {!notif.read && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2" />
-                        )}
+                {notifications.map((notif) => (
+                  <div
+                    key={notif.id}
+                    onClick={() => !notif.read && markAsRead(notif.id)}
+                    className={`p-4 rounded-xl border cursor-pointer transition-all duration-200 animate-fade-in-up ${
+                      notif.read
+                        ? 'bg-white border-gray-200'
+                        : 'bg-blue-50 border-blue-200 hover:bg-blue-100'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className={`p-2 rounded-full ${notif.read ? 'bg-gray-100' : 'bg-blue-100'}`}>
+                        <Bell className={`w-4 h-4 ${notif.read ? 'text-gray-500' : 'text-blue-600'}`} />
                       </div>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
+                      <div className="flex-1">
+                        <p className={`text-sm ${notif.read ? 'text-gray-600' : 'text-gray-900 font-medium'}`}>
+                          {notif.message}
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {new Date(notif.created_at).toLocaleString('pt-BR')}
+                        </p>
+                      </div>
+                      {!notif.read && (
+                        <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2" />
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { Search } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 import ItemCard from '@/components/ItemCard'
@@ -59,11 +58,7 @@ export default function GaleriaPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-fade-in-up">
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#1e3a5f' }}>
           Galeria de itens
         </h1>
@@ -99,8 +94,8 @@ export default function GaleriaPage() {
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="text-center py-16">
-            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <div className="text-center py-16 animate-fade-in-up">
+            <Search className="w-16 h-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum item encontrado</h3>
             <p className="text-gray-500">
               {search ? 'Tente buscar com outras palavras' : 'Ainda não há itens nesta categoria'}
@@ -113,7 +108,7 @@ export default function GaleriaPage() {
             ))}
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   )
 }

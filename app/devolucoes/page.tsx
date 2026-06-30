@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { CheckCircle, Calendar, MapPin, User } from 'lucide-react'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
@@ -45,11 +44,7 @@ export default function DevolucoesPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
+      <div className="animate-fade-in-up">
         <h1 className="text-3xl font-bold mb-2" style={{ color: '#1e3a5f' }}>
           Itens devolvidos
         </h1>
@@ -72,7 +67,7 @@ export default function DevolucoesPage() {
             ))}
           </div>
         ) : items.length === 0 ? (
-          <div className="text-center py-16">
+          <div className="text-center py-16 animate-fade-in-up">
             <CheckCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhuma devolução ainda</h3>
             <p className="text-gray-500">Quando itens forem devolvidos, eles aparecerão aqui.</p>
@@ -80,12 +75,10 @@ export default function DevolucoesPage() {
         ) : (
           <div className="space-y-4">
             {items.map((item, i) => (
-              <motion.div
+              <div
                 key={item.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: i * 0.1 }}
-                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-all duration-200"
+                className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md transition-all duration-200 animate-fade-in-up"
+                style={{ animationDelay: `${i * 0.1}s` }}
               >
                 <div className="flex gap-4">
                   <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
@@ -121,11 +114,11 @@ export default function DevolucoesPage() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}
-      </motion.div>
+      </div>
     </div>
   )
 }

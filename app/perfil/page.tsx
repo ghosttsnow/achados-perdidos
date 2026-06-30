@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Package, Mail, User, LogOut, Settings, Award, Shield, Heart, BookOpen, GraduationCap, Shirt } from 'lucide-react'
+import { Package, LogOut, Settings, Award, Shield, Heart, BookOpen, GraduationCap, Shirt } from 'lucide-react'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-import ItemCard from '@/components/ItemCard'
 import { supabase, isSupabaseConfigured } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
@@ -24,35 +23,26 @@ interface Item {
 export default function PerfilPage() {
   const { user, signOut, loading: authLoading } = useAuth()
   const [items, setItems] = useState<Item[]>([])
-  const [loading, setLoading] = useState(false)
-  const [searched, setSearched] = useState(false)
-  const [email, setEmail] = useState('')
-  const [showLogin, setShowLogin] = useState(false)
 
   useEffect(() => {
     if (user) {
-      setEmail(user.email || '')
       fetchUserItems()
     }
   }, [user])
 
   async function fetchUserItems() {
     if (!isSupabaseConfigured()) return
-    setLoading(true)
     const { data } = await supabase!
       .from('items')
       .select('*')
       .eq('contact', user?.email)
       .order('created_at', { ascending: false })
     setItems(data || [])
-    setLoading(false)
-    setSearched(true)
   }
 
   async function handleSignOut() {
     await signOut()
     setItems([])
-    setSearched(false)
   }
 
   const getStatusColor = (status: string) => {
@@ -260,9 +250,9 @@ export default function PerfilPage() {
                           <Award className="w-3 h-3" />
                           {new Date(item.created_at).toLocaleDateString('pt-BR')}
                         </span>
-</div>
-          </div>
-        </div>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             )}
@@ -288,6 +278,6 @@ function StatCard({ icon: Icon, label, value, color }: { icon: React.ComponentTy
           <Icon className="w-6 h-6 text-white" />
         </div>
       </div>
-    )
+    </div>
   )
 }
