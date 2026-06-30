@@ -1,10 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { CheckCircle, Package, LogOut } from 'lucide-react'
-import { getItems, updateItemStatus, createNotification } from '@/lib/storage'
+import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOpen } from 'lucide-react'
+import { getItems, updateItemStatus, createNotification, createItem } from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
+
+const categories = [
+  { value: 'uniforme', label: 'Uniforme', icon: Shirt },
+  { value: 'eletronico', label: 'Eletrônico', icon: Laptop },
+  { value: 'material', label: 'Material', icon: BookOpen },
+  { value: 'outro', label: 'Outro', icon: Package },
+]
 
 interface Item {
   id: string
@@ -23,6 +30,13 @@ export default function AdminPage() {
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<'todos' | 'perdido' | 'encontrado' | 'devolvido'>('todos')
+  const [showForm, setShowForm] = useState(false)
+  const [formData, setFormData] = useState({
+    title: '', description: '', category: 'uniforme', location: '', reported_by: '', contact: '',
+  })
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [formSuccess, setFormSuccess] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -51,6 +65,39 @@ export default function AdminPage() {
       }
     }
     fetchItems()
+  }
+
+  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => setPhotoPreview(reader.result as string)
+      reader.readAsDataURL(file)
+    }
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setSubmitting(true)
+    createItem({
+      title: formData.title,
+      description: formData.description,
+      category: formData.category,
+      location: formData.location,
+      reported_by: formData.reported_by || 'Administrador',
+      contact: formData.contact,
+      photo_url: photoPreview,
+      status: 'encontrado',
+    })
+    setSubmitting(false)
+    setFormSuccess(true)
+    setTimeout(() => {
+      setFormSuccess(false)
+      setShowForm(false)
+      setFormData({ title: '', description: '', category: 'uniforme', location: '', reported_by: '', contact: '' })
+      setPhotoPreview(null)
+      fetchItems()
+    }, 1500)
   }
 
   function handleLogout() {
@@ -97,6 +144,138 @@ export default function AdminPage() {
             </div>
           ))}
         </div>
+
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium mb-6 transition-all duration-200 hover:scale-[1.02]"
+          style={{ backgroundColor: '#1e3a5f' }}
+        >
+          <Plus className="w-5 h-5" />
+          {showForm ? 'Fechar' : 'Reportar Item Encontrado'}
+        </button>
+
+        {showForm && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6 mb-6 animate-fade-in-up">
+            {formSuccess ? (
+              <div className="text-center py-8 animate-scale-in">
+                <div className="text-5xl text-green-500 mb-4">&#10003;</div>
+                <p className="text-lg font-medium text-gray-900">Item reportado com sucesso!</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <h2 className="text-lg font-semibold" style={{ color: '#1e3a5f' }}>Novo Item Encontrado</h2>
+                <p className="text-sm text-gray-500 -mt-3">Preencha os dados do item que foi encontrado na escola.</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Nome do item *</label>
+                    <input
+                      type="text" required
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="Ex: Kimono preto, Caderneta..."
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Categoria *</label>
+                    <div className="flex gap-2">
+                      {categories.map((cat) => {
+                        const Icon = cat.icon
+                        const isSelected = formData.category === cat.value
+                        return (
+                          <button
+                            key={cat.value} type="button"
+                            onClick={() => setFormData({ ...formData, category: cat.value })}
+                            className={`flex items-center gap-1 px-3 py-2 rounded-lg border-2 transition-all duration-200 text-sm ${
+                              isSelected
+                                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                : 'border-gray-200 hover:border-gray-300 text-gray-600'
+                            }`}
+                          >
+                            <Icon className="w-4 h-4" />
+                            <span>{cat.label}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Descrição *</label>
+                  <textarea
+                    required rows={2}
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Descreva o item: cor, marca, detalhes..."
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Local *</label>
+                    <input
+                      type="text" required
+                      value={formData.location}
+                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      placeholder="Ex: Pátio, Sala 201..."
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Quem encontrou</label>
+                    <input
+                      type="text"
+                      value={formData.reported_by}
+                      onChange={(e) => setFormData({ ...formData, reported_by: e.target.value })}
+                      placeholder="Seu nome"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Contato</label>
+                    <input
+                      type="text"
+                      value={formData.contact}
+                      onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                      placeholder="Tel ou sala"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Foto</label>
+                  <div className="flex items-center gap-4">
+                    <label className="flex items-center gap-2 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-all duration-200">
+                      <Upload className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm text-gray-600">{photoPreview ? 'Trocar foto' : 'Enviar foto'}</span>
+                      <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+                    </label>
+                    {photoPreview && (
+                      <div className="flex items-center gap-2">
+                        <img src={photoPreview} alt="Preview" className="w-12 h-12 rounded-lg object-cover" />
+                        <button type="button" onClick={() => setPhotoPreview(null)} className="text-xs text-red-500 hover:text-red-700">Remover</button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium transition-all duration-200 hover:scale-[1.02] disabled:opacity-50"
+                  style={{ backgroundColor: '#1e3a5f' }}
+                >
+                  <Send className="w-4 h-4" />
+                  {submitting ? 'Salvando...' : 'Reportar Item Encontrado'}
+                </button>
+              </form>
+            )}
+          </div>
+        )}
 
         <div className="flex flex-wrap gap-2 mb-6">
           {(['todos', 'perdido', 'encontrado', 'devolvido'] as const).map((status) => (
