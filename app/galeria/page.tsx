@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Search } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { getItems } from '@/lib/storage'
 import ItemCard from '@/components/ItemCard'
 import CategoryFilter from '@/components/CategoryFilter'
@@ -23,9 +23,15 @@ export default function GaleriaPage() {
   const [category, setCategory] = useState('todos')
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [filtering, setFiltering] = useState(false)
 
   useEffect(() => {
-    fetchItems()
+    setFiltering(true)
+    const t = setTimeout(() => {
+      fetchItems()
+      setFiltering(false)
+    }, 250)
+    return () => clearTimeout(t)
   }, [category])
 
   function fetchItems() {
@@ -45,7 +51,8 @@ export default function GaleriaPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="animate-fade-in-up">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#1e3a5f' }}>
+        <h1 className="text-3xl font-bold mb-2 flex items-center gap-3" style={{ color: '#1e3a5f' }}>
+          <Search className="w-8 h-8 animate-float" style={{ color: '#1e3a5f' }} />
           Galeria de itens
         </h1>
         <p className="text-gray-600 mb-8">
@@ -53,24 +60,32 @@ export default function GaleriaPage() {
         </p>
 
         <div className="relative mb-6">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por nome ou descrição..."
-            className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+            className="w-full pl-11 pr-10 py-3.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-gray-400"
           />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         <div className="mb-8">
           <CategoryFilter selected={category} onChange={setCategory} />
         </div>
 
-        {loading ? (
+        {loading || filtering ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
+              <div key={i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden animate-pulse" style={{ animationDelay: `${i * 80}ms` }}>
                 <div className="h-48 bg-gray-200" />
                 <div className="p-4 space-y-3">
                   <div className="h-5 bg-gray-200 rounded w-3/4" />
@@ -80,11 +95,13 @@ export default function GaleriaPage() {
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="text-center py-16 animate-fade-in-up">
-            <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum item encontrado</h3>
+          <div className="text-center py-20 animate-fade-in-up">
+            <div className="relative inline-block">
+              <Search className="w-20 h-20 text-gray-200 mx-auto mb-4 animate-float" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-900 mb-2">Nenhum item encontrado</h3>
             <p className="text-gray-500">
-              {search ? 'Tente buscar com outras palavras' : 'Ainda não há itens nesta categoria'}
+              {search ? `Nenhum resultado para "${search}"` : 'Ainda não há itens nesta categoria'}
             </p>
           </div>
         ) : (

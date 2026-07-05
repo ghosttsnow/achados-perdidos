@@ -23,9 +23,15 @@ export default function Home() {
   const [items, setItems] = useState<Item[]>([])
   const [category, setCategory] = useState('todos')
   const [loading, setLoading] = useState(true)
+  const [filtering, setFiltering] = useState(false)
 
   useEffect(() => {
-    fetchItems()
+    setFiltering(true)
+    const t = setTimeout(() => {
+      fetchItems()
+      setFiltering(false)
+    }, 250)
+    return () => clearTimeout(t)
   }, [category])
 
   function fetchItems() {
@@ -50,7 +56,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/reportar"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-[1.02]"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95"
             style={{ backgroundColor: '#1e3a5f' }}
           >
             <Plus className="w-5 h-5" />
@@ -58,7 +64,7 @@ export default function Home() {
           </Link>
           <Link
             href="/galeria"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium border-2 border-gray-200 hover:border-gray-300 transition-all duration-200"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-medium border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 active:scale-95"
             style={{ color: '#1e3a5f' }}
           >
             <Search className="w-5 h-5" />
@@ -68,15 +74,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+      <section className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Itens recentes</h2>
         <CategoryFilter selected={category} onChange={setCategory} />
       </section>
 
-      {loading ? (
+      {loading || filtering ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
+            <div key={i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
               <div className="h-48 bg-gray-200" />
               <div className="p-4 space-y-3">
                 <div className="h-5 bg-gray-200 rounded w-3/4" />
@@ -87,13 +93,15 @@ export default function Home() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 animate-fade-in-up">
-          <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum item ainda</h3>
+        <div className="text-center py-20 animate-fade-in-up">
+          <div className="relative inline-block">
+            <Search className="w-20 h-20 text-gray-200 mx-auto mb-4 animate-float" />
+          </div>
+          <h3 className="text-xl font-medium text-gray-900 mb-2">Nenhum item ainda</h3>
           <p className="text-gray-500 mb-6">Seja o primeiro a reportar um item perdido!</p>
           <Link
             href="/reportar"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-white font-medium"
+            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-medium shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-95"
             style={{ backgroundColor: '#1e3a5f' }}
           >
             <Plus className="w-5 h-5" />

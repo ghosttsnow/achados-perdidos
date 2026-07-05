@@ -21,6 +21,7 @@ interface Item {
 export default function PerfilPage() {
   const { user, signOut, loading: authLoading } = useAuth()
   const [items, setItems] = useState<Item[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (user) fetchUserItems()
@@ -30,7 +31,10 @@ export default function PerfilPage() {
     const all = getItems().filter(i => i.contact === user?.email).sort((a, b) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
-    setItems(all)
+    setTimeout(() => {
+      setItems(all)
+      setLoading(false)
+    }, 300)
   }
 
   async function handleSignOut() {
@@ -84,9 +88,9 @@ export default function PerfilPage() {
         <div className="mb-8 animate-fade-in-up">
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-6">
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-6 animate-slide-in-left">
                 <div className="relative">
-                  <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-3xl shadow-xl">
+                  <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-3xl shadow-xl transition-transform duration-300 hover:scale-110">
                     {user?.user_metadata?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
                   </div>
                 </div>
@@ -111,20 +115,41 @@ export default function PerfilPage() {
               </div>
               <button
                 onClick={handleSignOut}
-                className="px-4 py-2 rounded-xl font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-all duration-200 flex items-center gap-2"
+                className="px-5 py-2.5 rounded-xl font-medium text-gray-700 border border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all duration-300 flex items-center gap-2 active:scale-95 animate-slide-in-right"
               >
-                <LogOut className="w-4 h-4" />
+                <LogOut className="w-4 h-4 transition-transform duration-200 group-hover:-translate-x-1" />
                 Sair
               </button>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <StatCard icon={Package} label="Total" value={items.length} color="from-blue-500 to-blue-600" />
-          <StatCard icon={Award} label="Perdidos" value={items.filter(i => i.status === 'perdido').length} color="from-orange-500 to-orange-600" />
-          <StatCard icon={Shield} label="Encontrados" value={items.filter(i => i.status === 'encontrado').length} color="from-green-500 to-green-600" />
-          <StatCard icon={Award} label="Devolvidos" value={items.filter(i => i.status === 'devolvido').length} color="from-blue-500 to-blue-600" />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {[
+            { icon: Package, label: 'Total', value: items.length, color: 'from-blue-500 to-blue-600', delay: 100 },
+            { icon: Award, label: 'Perdidos', value: items.filter(i => i.status === 'perdido').length, color: 'from-orange-500 to-orange-600', delay: 200 },
+            { icon: Shield, label: 'Encontrados', value: items.filter(i => i.status === 'encontrado').length, color: 'from-green-500 to-green-600', delay: 300 },
+            { icon: Award, label: 'Devolvidos', value: items.filter(i => i.status === 'devolvido').length, color: 'from-blue-500 to-blue-600', delay: 400 },
+          ].map((stat) => {
+            const Icon = stat.icon
+            return (
+              <div
+                key={stat.label}
+                className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300 hover:scale-[1.05] animate-fade-in-up"
+                style={{ animationDelay: `${stat.delay}ms` }}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 mb-1">{stat.label}</p>
+                    <p className="text-3xl font-bold text-gray-900">{stat.value}</p>
+                  </div>
+                  <div className={`p-3 rounded-xl ${stat.color}`}>
+                    <Icon className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
@@ -138,14 +163,28 @@ export default function PerfilPage() {
           </div>
 
           <div className="p-6">
-            {items.length === 0 ? (
-              <div className="text-center py-16">
-                <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum item ainda</h3>
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="bg-gray-50 rounded-xl border border-gray-200 overflow-hidden animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
+                    <div className="h-40 bg-gray-200" />
+                    <div className="p-4 space-y-3">
+                      <div className="h-5 bg-gray-200 rounded w-3/4" />
+                      <div className="h-4 bg-gray-200 rounded w-full" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : items.length === 0 ? (
+              <div className="text-center py-16 animate-fade-in-up">
+                <div className="relative inline-block">
+                  <Package className="w-20 h-20 text-gray-200 mx-auto mb-4 animate-float" />
+                </div>
+                <h3 className="text-xl font-medium text-gray-900 mb-2">Nenhum item ainda</h3>
                 <p className="text-gray-500 mb-6">Comece reportando seu primeiro item perdido ou achado!</p>
                 <Link
                   href="/reportar"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg"
                   style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 100%)' }}
                 >
                   <Package className="w-5 h-5" />
@@ -157,31 +196,31 @@ export default function PerfilPage() {
                 {items.map((item, i) => (
                   <div
                     key={item.id}
-                    className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 animate-fade-in-up"
-                    style={{ animationDelay: `${i * 0.05}s` }}
+                    className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 animate-fade-in-up hover:-translate-y-1 group"
+                    style={{ animationDelay: `${i * 80}ms` }}
                   >
                     <div className="relative h-40 bg-gray-50 overflow-hidden">
                       {item.photo_url ? (
-                        <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
+                        <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-300">
                           {categoryIcons[item.category] || <Package className="w-10 h-10" />}
                         </div>
                       )}
                       <div className="absolute top-3 right-3">
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
+                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${getStatusColor(item.status)}`}>
                           {getStatusLabel(item.status)}
                         </span>
                       </div>
                       <div className="absolute top-3 left-3">
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-700 flex items-center gap-1">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 backdrop-blur-sm text-gray-700 flex items-center gap-1">
                           {categoryIcons[item.category]}
                           {categoryLabels[item.category] || item.category}
                         </span>
                       </div>
                     </div>
                     <div className="p-4">
-                      <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
+                      <h3 className="font-semibold text-gray-900 mb-1 group-hover:text-blue-900 transition-colors duration-200">{item.title}</h3>
                       <p className="text-sm text-gray-600 mb-3 line-clamp-2">{item.description}</p>
                       <div className="flex items-center gap-4 text-xs text-gray-500">
                         <span className="flex items-center gap-1">
@@ -201,22 +240,6 @@ export default function PerfilPage() {
           </div>
         </div>
       </main>
-    </div>
-  )
-}
-
-function StatCard({ icon: Icon, label, value, color }: { icon: React.ComponentType<{ className?: string }>; label: string; value: number; color: string }) {
-  return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-shadow duration-300 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-600 mb-1">{label}</p>
-          <p className="text-3xl font-bold text-gray-900">{value}</p>
-        </div>
-        <div className={`p-3 rounded-xl ${color}`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-      </div>
     </div>
   )
 }
