@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Package, LogOut, Award, Shield, BookOpen, GraduationCap, Shirt } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { getItems } from '@/lib/storage'
 
@@ -15,20 +16,31 @@ interface Item {
   location: string
   status: 'perdido' | 'encontrado' | 'devolvido'
   reported_by: string
+  contact: string
   created_at: string
 }
 
 export default function PerfilPage() {
   const { user, signOut, loading: authLoading } = useAuth()
+  const router = useRouter()
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/login')
+    }
     if (user) fetchUserItems()
-  }, [user])
+  }, [user, authLoading])
 
   function fetchUserItems() {
-    const all = getItems().filter(i => i.contact === user?.email).sort((a, b) =>
+    const userName = user?.user_metadata?.name?.toLowerCase() || ''
+    const userEmail = user?.email?.toLowerCase() || ''
+    const all = getItems().filter(i => {
+      const byName = i.reported_by?.toLowerCase() === userName
+      const byEmail = i.contact?.toLowerCase() === userEmail
+      return byName || byEmail
+    }).sort((a, b) =>
       new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
     setTimeout(() => {
@@ -40,6 +52,7 @@ export default function PerfilPage() {
   async function handleSignOut() {
     await signOut()
     setItems([])
+    router.push('/')
   }
 
   const getStatusColor = (status: string) => {
@@ -78,6 +91,24 @@ export default function PerfilPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50">
+        <div className="text-center animate-fade-in-up">
+          <Shield className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">Faça login para ver seu perfil</h2>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white mt-4 transition-all duration-300 hover:scale-[1.03] active:scale-95"
+            style={{ background: 'linear-gradient(135deg, #1e3a5f 0%, #2d5a8e 100%)' }}
+          >
+            Entrar
+          </Link>
+        </div>
       </div>
     )
   }

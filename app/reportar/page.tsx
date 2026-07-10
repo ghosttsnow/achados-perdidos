@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Send, Upload, Shirt, Laptop, BookOpen, Package } from 'lucide-react'
 import { createItem } from '@/lib/storage'
 import Link from 'next/link'
+import { useAuth } from '@/context/AuthContext'
 
 const categories = [
   { value: 'uniforme', label: 'Uniforme', icon: Shirt },
@@ -13,6 +14,7 @@ const categories = [
 ]
 
 export default function ReportarPage() {
+  const { user } = useAuth()
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -24,6 +26,16 @@ export default function ReportarPage() {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        reported_by: prev.reported_by || user.user_metadata?.name || '',
+        contact: prev.contact || user.email || '',
+      }))
+    }
+  }, [user])
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
