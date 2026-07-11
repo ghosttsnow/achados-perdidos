@@ -100,8 +100,18 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.animate-dropdown {
+@keyframes dropdown-out {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to { opacity: 0; transform: translateY(-8px) scale(0.95); }
+}
+
+.animate-dropdown-in {
   animation: dropdown-in 0.2s ease-out forwards;
+  transform-origin: top right;
+}
+
+.animate-dropdown-out {
+  animation: dropdown-out 0.15s ease-in forwards;
   transform-origin: top right;
 }
 
