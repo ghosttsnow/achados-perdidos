@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { Mail, Lock, Eye, EyeOff, User, BookOpen } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 
 export default function LoginPage() {
   const { signIn } = useAuth()
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -21,6 +23,8 @@ export default function LoginPage() {
     const { error } = await signIn(email, password)
     if (error) {
       setError(error.message)
+    } else {
+      router.push('/')
     }
     setLoading(false)
   }
