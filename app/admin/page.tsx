@@ -5,6 +5,7 @@ import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOp
 import { getItems, updateItemStatus, createNotification, createItem } from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
+import { initEmailJS, sendItemFoundEmail } from '@/lib/notify'
 
 const categories = [
   { value: 'uniforme', label: 'Uniforme', icon: Shirt },
@@ -61,6 +62,7 @@ export default function AdminPage() {
   }, [])
 
   useEffect(() => {
+    initEmailJS()
     fetchItems()
   }, [filter])
 
@@ -84,6 +86,23 @@ export default function AdminPage() {
         message: `Seu "${item.title}" foi encontrado! Procure a coordenação para buscar.`,
         read: false,
       })
+
+      const allItems = getItems()
+      const lostItem = allItems.find(
+        i => i.status === 'perdido' && i.title.toLowerCase() === item.title.toLowerCase() && i.contact?.includes('@')
+      )
+      if (lostItem && lostItem.contact) {
+        sendItemFoundEmail({
+          to_name: lostItem.reported_by || 'Aluno(a)',
+          to_email: lostItem.contact,
+          item_name: item.title,
+          item_location: item.location || 'não informado',
+          found_by: item.reported_by || 'Administrador',
+        }).then(sent => {
+          if (sent) addToast(`Email enviado para ${lostItem.reported_by}!`, 'success')
+        })
+      }
+
       addToast(`"${item.title}" marcado como encontrado!`, 'success')
     }
     if (newStatus === 'devolvido' && item) {

@@ -187,15 +187,16 @@ export default function ReportarPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Contato (WhatsApp ou email) *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Seu email para notificações *</label>
             <input
-              type="text"
+              type="email"
               required
               value={formData.contact}
               onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-              placeholder="(11) 99999-9999 ou email@colegio.com"
+              placeholder="seu@email.com"
               className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
             />
+            <p className="text-xs text-gray-500 mt-1">Você receberá um email quando seu item for encontrado</p>
           </div>
 
           <button
