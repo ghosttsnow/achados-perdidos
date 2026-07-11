@@ -123,7 +123,7 @@ export default function AdminPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setSubmitting(true)
-    createItem({
+    const newItem = createItem({
       title: formData.title,
       description: formData.description,
       category: formData.category,
@@ -133,6 +133,23 @@ export default function AdminPage() {
       photo_url: photoPreview,
       status: 'encontrado',
     })
+
+    const allItems = getItems()
+    const lostItem = allItems.find(
+      i => i.id !== newItem.id && i.status === 'perdido' && i.title.toLowerCase() === newItem.title.toLowerCase() && i.contact?.includes('@')
+    )
+    if (lostItem && lostItem.contact) {
+      sendItemFoundEmail({
+        to_name: lostItem.reported_by || 'Aluno(a)',
+        to_email: lostItem.contact,
+        item_name: newItem.title,
+        item_location: newItem.location || 'não informado',
+        found_by: newItem.reported_by || 'Administrador',
+      }).then(sent => {
+        if (sent) addToast(`Email enviado para ${lostItem.reported_by}!`, 'success')
+      })
+    }
+
     setSubmitting(false)
     setFormSuccess(true)
     addToast('Item reportado com sucesso!', 'success')
