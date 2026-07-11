@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Search, Plus, User, X, LogOut, BookOpen, Package } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import NotificationBell from './NotificationBell'
 import { useAuth } from '@/context/AuthContext'
 
@@ -17,7 +17,19 @@ const navLinks = [
 export default function Navbar() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const { user, signOut, loading } = useAuth()
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   if (pathname.startsWith('/admin')) return null
   if (pathname.startsWith('/auth')) return null
@@ -66,9 +78,9 @@ export default function Navbar() {
           {/* User Menu / Auth Buttons */}
           <div className="hidden md:flex items-center gap-3">
             {user ? (
-              <div className="relative">
+              <div className="relative" ref={dropdownRef}>
                 <button
-                  onClick={() => setMobileOpen(!mobileOpen)}
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-200 hover:bg-gray-50"
                 >
                   <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm">
@@ -80,6 +92,7 @@ export default function Navbar() {
                 </button>
 
                 {/* Dropdown */}
+                {dropdownOpen && (
                 <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50">
                   <div className="px-4 py-3 border-b border-gray-100">
                     <p className="text-sm font-medium text-gray-900">{user.user_metadata?.name || 'Usuário'}</p>
@@ -87,6 +100,7 @@ export default function Navbar() {
                   </div>
                   <Link
                     href="/perfil"
+                    onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <User className="w-4 h-4" />
@@ -94,6 +108,7 @@ export default function Navbar() {
                   </Link>
                   <Link
                     href="/reportar"
+                    onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <Package className="w-4 h-4" />
@@ -101,20 +116,22 @@ export default function Navbar() {
                   </Link>
                   <Link
                     href="/galeria"
+                    onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <Package className="w-4 h-4" />
                     Galeria
                   </Link>
                   <div className="border-t border-gray-100 my-2" />
-              <button
-                onClick={() => signOut?.()}
-                className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sair
-              </button>
-            </div>
+                  <button
+                    onClick={() => { setDropdownOpen(false); signOut?.() }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Sair
+                  </button>
+                </div>
+                )}
               </div>
             ) : (
               <div className="flex items-center gap-3">
