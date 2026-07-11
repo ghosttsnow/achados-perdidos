@@ -1,8 +1,8 @@
 import emailjs from '@emailjs/browser'
 
-const EMAILJS_SERVICE_ID = 'service_achados'
-const EMAILJS_TEMPLATE_ID = 'template_notificacao'
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'
+const EMAILJS_SERVICE_ID = 'service_f4aubtw'
+const EMAILJS_TEMPLATE_ID = 'template_rlva22r'
+const EMAILJS_PUBLIC_KEY = 'z5BQA4ltpy2oYOOWI'
 
 export function initEmailJS() {
   emailjs.init(EMAILJS_PUBLIC_KEY)
