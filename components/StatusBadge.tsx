@@ -3,15 +3,15 @@ interface StatusBadgeProps {
 }
 
 const statusConfig = {
-  perdido: { label: 'Perdido', color: 'bg-orange-100 text-orange-700' },
-  encontrado: { label: 'Encontrado', color: 'bg-green-100 text-green-700' },
-  devolvido: { label: 'Devolvido', color: 'bg-blue-100 text-blue-700' },
+  perdido: { label: 'Perdido', color: 'bg-orange-500 text-white' },
+  encontrado: { label: 'Encontrado', color: 'bg-green-500 text-white' },
+  devolvido: { label: 'Devolvido', color: 'bg-[#2563eb] text-white' },
 }
 
 export default function StatusBadge({ status }: StatusBadgeProps) {
   const config = statusConfig[status]
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+    <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold shadow-sm ${config.color}`}>
       {config.label}
     </span>
   )

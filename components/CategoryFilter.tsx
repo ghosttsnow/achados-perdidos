@@ -25,12 +25,11 @@ export default function CategoryFilter({ selected, onChange }: CategoryFilterPro
           <button
             key={cat.value}
             onClick={() => onChange(cat.value)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
               isActive
-                ? 'text-white shadow-md'
-                : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                ? 'bg-[#2563eb] text-white shadow-md shadow-blue-500/25'
+                : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300'
             }`}
-            style={isActive ? { backgroundColor: '#1e3a5f' } : {}}
           >
             <Icon className="w-4 h-4" />
             {cat.label}

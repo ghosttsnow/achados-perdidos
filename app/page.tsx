@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Search, Plus, ArrowRight } from 'lucide-react'
+import { Search, Plus, ArrowRight, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 import { getItems } from '@/lib/storage'
 import ItemCard from '@/components/ItemCard'
@@ -45,27 +45,30 @@ export default function Home() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Hero Section */}
       <section className="text-center mb-12 animate-fade-in-up">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#1e3a5f' }}>
-          Encontrou? Perdeu?
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-[#2563eb] text-sm font-medium mb-6">
+          <Sparkles className="w-4 h-4" />
+          Colégio Batista Nova Betânia
+        </div>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-gray-900" style={{ textWrap: 'balance' }}>
+          Encontrou? <span className="text-[#2563eb]">Perdeu?</span>
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto" style={{ textWrap: 'pretty' }}>
           A gente ajuda. Reporte itens perdidos ou veja se o seu já foi encontrado.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/reportar"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.03] active:scale-95"
-            style={{ backgroundColor: '#1e3a5f' }}
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-95"
           >
             <Plus className="w-5 h-5" />
             Reportar item perdido
           </Link>
           <Link
             href="/galeria"
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl font-medium border-2 border-gray-200 hover:border-blue-300 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 active:scale-95"
-            style={{ color: '#1e3a5f' }}
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-[#2563eb] hover:text-[#2563eb] hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
           >
             <Search className="w-5 h-5" />
             Ver itens achados
@@ -74,35 +77,59 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats */}
+      <section className="grid grid-cols-3 gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-2xl p-4 text-center border border-orange-100">
+          <div className="text-2xl md:text-3xl font-bold text-orange-600">0</div>
+          <div className="text-sm text-orange-700/70 font-medium">Perdidos</div>
+        </div>
+        <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-4 text-center border border-green-100">
+          <div className="text-2xl md:text-3xl font-bold text-green-600">0</div>
+          <div className="text-sm text-green-700/70 font-medium">Encontrados</div>
+        </div>
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-4 text-center border border-blue-100">
+          <div className="text-2xl md:text-3xl font-bold text-[#2563eb]">0</div>
+          <div className="text-sm text-blue-700/70 font-medium">Devolvidos</div>
+        </div>
+      </section>
+
+      {/* Filters */}
       <section className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Itens recentes</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900">Itens recentes</h2>
+          <Link href="/galeria" className="text-sm font-medium text-[#2563eb] hover:text-[#1d4ed8] transition-colors">
+            Ver todos →
+          </Link>
+        </div>
         <CategoryFilter selected={category} onChange={setCategory} />
       </section>
 
+      {/* Items Grid */}
       {loading || filtering ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-200 overflow-hidden animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="h-48 bg-gray-200" />
+            <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse shadow-sm" style={{ animationDelay: `${i * 100}ms` }}>
+              <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50" />
               <div className="p-4 space-y-3">
-                <div className="h-5 bg-gray-200 rounded w-3/4" />
-                <div className="h-4 bg-gray-200 rounded w-full" />
-                <div className="h-4 bg-gray-200 rounded w-1/2" />
+                <div className="h-5 bg-gray-100 rounded-lg w-3/4" />
+                <div className="h-4 bg-gray-100 rounded-lg w-full" />
+                <div className="h-4 bg-gray-100 rounded-lg w-1/2" />
               </div>
             </div>
           ))}
         </div>
       ) : items.length === 0 ? (
         <div className="text-center py-20 animate-fade-in-up">
-          <div className="relative inline-block">
-            <Search className="w-20 h-20 text-gray-200 mx-auto mb-4 animate-float" />
+          <div className="relative inline-block mb-6">
+            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100/50 flex items-center justify-center mx-auto">
+              <Search className="w-12 h-12 text-[#2563eb]/40 animate-float" />
+            </div>
           </div>
-          <h3 className="text-xl font-medium text-gray-900 mb-2">Nenhum item ainda</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Nenhum item ainda</h3>
           <p className="text-gray-500 mb-6">Seja o primeiro a reportar um item perdido!</p>
           <Link
             href="/reportar"
-            className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-medium shadow-lg transition-all duration-300 hover:scale-[1.03] active:scale-95"
-            style={{ backgroundColor: '#1e3a5f' }}
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-95"
           >
             <Plus className="w-5 h-5" />
             Reportar item

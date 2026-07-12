@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-11T22:02:00Z",
+  "title": "Design System: Achados e Perdidos",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Deep Navy",
+        "canonical": "#1e3a5f",
+        "tonalRamp": ["#0c1a2e", "#122642", "#1e3a5f", "#2d5a8e", "#4a7ab5", "#7aa3d1", "#b3cde8", "#e8f1fa"]
+      },
+      "primary-light": {
+        "role": "primary",
+        "displayName": "Soft Navy",
+        "canonical": "#2d5a8e",
+        "tonalRamp": ["#1a3553", "#2d5a8e", "#4a7ab5", "#7aa3d1", "#b3cde8", "#d4e6f5", "#e8f1fa", "#f4f9fd"]
+      },
+      "success": {
+        "role": "semantic",
+        "displayName": "Status Green",
+        "canonical": "#22c55e",
+        "tonalRamp": ["#166534", "#15803d", "#22c55e", "#4ade80", "#86efac", "#bbf7d0", "#dcfce7", "#f0fdf4"]
+      },
+      "warning": {
+        "role": "semantic",
+        "displayName": "Status Orange",
+        "canonical": "#f97316",
+        "tonalRamp": ["#7c2d12", "#c2410c", "#f97316", "#fb923c", "#fdba74", "#fed7aa", "#ffedd5", "#fff7ed"]
+      },
+      "neutral-bg": {
+        "role": "neutral",
+        "displayName": "Background",
+        "canonical": "#f8fafc",
+        "tonalRamp": ["#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0", "#f8fafc"]
+      },
+      "neutral-surface": {
+        "role": "neutral",
+        "displayName": "Surface",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#f8fafc", "#f1f5f9", "#e2e8f0", "#cbd5e1", "#94a3b8", "#64748b", "#475569", "#ffffff"]
+      },
+      "neutral-text": {
+        "role": "neutral",
+        "displayName": "Text",
+        "canonical": "#1e293b",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0"]
+      },
+      "neutral-muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#64748b",
+        "tonalRamp": ["#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#e2e8f0", "#f1f5f9", "#f8fafc"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Títulos de página — headings grandes e impactantes."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Subtítulos de seção, títulos de card."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Textos de descrição, parágrafos, conteúdo principal."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Badges, chips, botões, metadados, textos auxiliares."
+      }
+    },
+    "shadows": [
+      { "name": "rest", "value": "0 1px 3px rgba(0,0,0,0.1)", "purpose": "Cards em estado normal — presença sem peso." },
+      { "name": "hover", "value": "0 10px 25px rgba(0,0,0,0.1)", "purpose": "Cards em hover — elevação sutil que convida interação." },
+      { "name": "focus", "value": "0 0 0 3px rgba(30,58,95,0.1)", "purpose": "Anéis de foco — acessibilidade sem agressividade." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Easing padrão para transições de estado." },
+      { "name": "ease-out", "value": "cubic-bezier(0, 0, 0.2, 1)", "purpose": "Easing para animações de entrada." },
+      { "name": "duration-fast", "value": "150ms", "purpose": "Transições rápidas — hover, toggle." },
+      { "name": "duration-normal", "value": "200ms", "purpose": "Transições padrão — botões, chips." },
+      { "name": "duration-slow", "value": "300ms", "purpose": "Transições complexas — cards, dropdowns." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Botão principal para ações de destaque — reportar item, confirmar, enviar.",
+      "html": "<button class=\"ds-btn-primary\">Reportar Item</button>",
+      "css": ".ds-btn-primary { background: #1e3a5f; color: #ffffff; padding: 12px 24px; font-weight: 500; font-size: 14px; border: none; border-radius: 16px; cursor: pointer; transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:hover { background: #2d5a8e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30,58,95,0.2); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(30,58,95,0.2); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Botão secundário para ações de menor destaque — ver galeria, cancelar.",
+      "html": "<button class=\"ds-btn-secondary\">Ver Galeria</button>",
+      "css": ".ds-btn-secondary { background: transparent; color: #1e3a5f; padding: 8px 16px; font-weight: 500; font-size: 14px; border: 2px solid #1e3a5f; border-radius: 9999px; cursor: pointer; transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-secondary:hover { background: #1e3a5f; color: #ffffff; } .ds-btn-secondary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(30,58,95,0.2); }"
+    },
+    {
+      "name": "Item Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Card para exibir itens perdidos/encontrados — imagem, título, status, metadados.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-image\"><img src=\"placeholder.jpg\" alt=\"Item\"></div><div class=\"ds-card-body\"><h3 class=\"ds-card-title\">Camiseta Azul</h3><p class=\"ds-card-desc\"> uniforme escolar tamanho M</p></div></div>",
+      "css": ".ds-card { background: #ffffff; border-radius: 24px; border: 1px solid #e2e8f0; overflow: hidden; transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; } .ds-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); } .ds-card-image { height: 192px; background: #f1f5f9; overflow: hidden; } .ds-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-card:hover .ds-card-image img { transform: scale(1.05); } .ds-card-body { padding: 16px; } .ds-card-title { font-weight: 600; font-size: 16px; color: #1e293b; margin: 0 0 4px 0; } .ds-card-desc { font-size: 14px; color: #64748b; margin: 0; line-height: 1.4; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Badge de status para indicar se o item está perdido, encontrado ou devolvido.",
+      "html": "<span class=\"ds-badge ds-badge-perdido\">Perdido</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 9999px; font-size: 12px; font-weight: 500; } .ds-badge-perdido { background: #fff7ed; color: #c2410c; } .ds-badge-encontrado { background: #f0fdf4; color: #15803d; } .ds-badge-devolvido { background: #eff6ff; color: #1d4ed8; }"
+    },
+    {
+      "name": "Category Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Chip de filtro por categoria — pill-shaped, ícone + texto.",
+      "html": "<button class=\"ds-chip\">Todos</button>",
+      "css": ".ds-chip { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 9999px; font-size: 14px; font-weight: 500; border: 1px solid #e2e8f0; background: #ffffff; color: #64748b; cursor: pointer; transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-chip:hover { background: #f8fafc; } .ds-chip.active { background: #1e3a5f; color: #ffffff; border-color: #1e3a5f; box-shadow: 0 2px 8px rgba(30,58,95,0.2); }"
+    },
+    {
+      "name": "Input Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo de input para formulários — borda sutil, foco azul.",
+      "html": "<input class=\"ds-input\" placeholder=\"Buscar item...\">",
+      "css": ".ds-input { width: 100%; padding: 12px 16px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 16px; color: #1e293b; transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-input::placeholder { color: #64748b; } .ds-input:focus { outline: none; border-color: #1e3a5f; box-shadow: 0 0 0 3px rgba(30,58,95,0.1); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Quadro de Avisos Digital",
+    "overview": "Um sistema que evoca a familiaridade de um quadro de aviso escolar — organizado, acessível, direto — mas com a fluidez de uma interface moderna. A estética é institucional sem ser fria, funcional sem ser sem alma. Rejects explicitamente dashboards corporativos cinza e interfaces escolares infantilizadas com cores chapadas.",
+    "keyCharacteristics": [
+      "Fundo neutro claro (#f8fafc) que empresta calor sem ser cream/sand",
+      "Azul profundo (#1e3a5f) como âncora de confiança e seriedade",
+      "Cards brancos com sombras sutis que criam hierarquia sem sobrecarga",
+      "Animações de entrada suaves que guiam o olhar sem distrair",
+      "Badges de status com cores semânticas (laranja/verde/azul) para feedback instantâneo"
+    ],
+    "rules": [
+      { "name": "The Institutional Accent Rule", "body": "O azul profundo aparece em ≤15% de qualquer tela. Sua raridade é o que transmite autoridade sem dominar.", "section": "colors" },
+      { "name": "The School Bulletin Rule", "body": "Títulos são diretos e curtos como em um quadro de avisos. Nunca mais de 8 palavras em um heading de página.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Superfícies são planas. Sombras são reação, não decoração. Se uma sombra está sempre visível, ela está pesada demais.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do usar Deep Navy (#1e3a5f) como âncora visual — é a cor de confiança e autoridade do sistema.",
+      "Do manter fundo neutro claro (#f8fafc) — não é cream, não é sand, é branco levemente azulado.",
+      "Do usar cores semânticas para status (laranja=perdido, verde=encontrado, azul=devolvido) — são universais e intuitivas.",
+      "Do aplicar sombras apenas em hover/active — o sistema é flat por padrão.",
+      "Do usar border-radius generoso (16-24px) — bordas gentes transmitem acolhimento.",
+      "Do manter headings curtos como em um quadro de avisos escolar — direto ao ponto.",
+      "Do usar Inter como família tipográfica — limpa, profissional, boa legibilidade."
+    ],
+    "donts": [
+      "Don't usar cores cream/sand/beige no fundo — é o padrão AI saturado de 2026, o sistema já tem fundo próprio (#f8fafc).",
+      "Don't aplicar gradientes em textos — decorativo, nunca significativo. Use uma cor sólida.",
+      "Don't usar glassmorphism como padrão — blur e glass cards devem ser raros e intencionais.",
+      "Don't criar grids de cards idênticos com ícone + heading + texto repetidos — varie o layout.",
+      "Don't usar border-left ou border-right maior que 1px como acento colorido — proibido.",
+      "Don't infantilizar com cores primárias chapadas — o sistema é sério mas acolhedor, não cartoon.",
+      "Don't criar dashboards corporativos cinza frio — o sistema é escolar, não SaaS.",
+      "Don't usar small uppercase tracked eyebrow em cada seção — é o scaffolding AI saturado, não voz da marca.",
+      "Don't colocar números 01/02/03 como marcadores de seção — use apenas quando a sequência é informativa.",
+      "Don't deixar texto transbender o container — teste headings em todos os breakpoints."
+    ]
+  }
+}

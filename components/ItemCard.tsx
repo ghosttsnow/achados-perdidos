@@ -21,10 +21,10 @@ interface ItemCardProps {
 }
 
 const categoryColors: Record<string, string> = {
-  uniforme: 'bg-purple-50 text-purple-700',
-  eletronico: 'bg-blue-50 text-blue-700',
-  material: 'bg-amber-50 text-amber-700',
-  outro: 'bg-gray-50 text-gray-700',
+  uniforme: 'bg-purple-100 text-purple-700',
+  eletronico: 'bg-blue-100 text-blue-700',
+  material: 'bg-amber-100 text-amber-700',
+  outro: 'bg-gray-100 text-gray-600',
 }
 
 export default function ItemCard({ item, index = 0 }: ItemCardProps) {
@@ -35,10 +35,10 @@ export default function ItemCard({ item, index = 0 }: ItemCardProps) {
 
   return (
     <div
-      className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer animate-fade-in-up hover:-translate-y-1 group"
+      className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 cursor-pointer animate-fade-in-up hover:-translate-y-1 group"
       style={{ animationDelay: `${index * 80}ms` }}
     >
-      <div className="h-48 bg-gray-100 relative overflow-hidden">
+      <div className="h-48 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
         {item.photo_url ? (
           <img
             src={item.photo_url}
@@ -46,34 +46,31 @@ export default function ItemCard({ item, index = 0 }: ItemCardProps) {
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
-            <svg className="w-12 h-12 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <div className="w-full h-full flex items-center justify-center">
+            <svg className="w-16 h-16 text-gray-200 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
           </div>
         )}
         <div className="absolute top-3 right-3">
           <StatusBadge status={item.status} />
         </div>
-      </div>
-
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-gray-900 text-lg leading-tight group-hover:text-blue-900 transition-colors duration-200">{item.title}</h3>
-          <span className={`text-xs px-2.5 py-1 rounded-full flex-shrink-0 ${categoryColors[item.category] || 'bg-gray-50 text-gray-700'}`}>
+        <div className="absolute top-3 left-3">
+          <span className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium ${categoryColors[item.category] || categoryColors.outro}`}>
             {item.category}
           </span>
         </div>
-
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2">{item.description}</p>
-
-        <div className="flex items-center gap-4 text-xs text-gray-500">
+      </div>
+      <div className="p-4">
+        <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1 group-hover:text-[#2563eb] transition-colors">{item.title}</h3>
+        <p className="text-sm text-gray-500 mb-3 line-clamp-2">{item.description}</p>
+        <div className="flex items-center gap-4 text-xs text-gray-400">
           <span className="flex items-center gap-1">
-            <MapPin className="w-3 h-3" />
+            <MapPin className="w-3.5 h-3.5" />
             {item.location}
           </span>
           <span className="flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
+            <Calendar className="w-3.5 h-3.5" />
             {formattedDate}
           </span>
         </div>

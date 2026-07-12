@@ -1,0 +1,6 @@
+{
+  "files": ["app/**/*.tsx", "components/**/*.tsx"],
+  "insertBefore": "<!-- PENCIL_LIVE -->",
+  "commentSyntax": "{/* PENCIL_LIVE */}",
+  "cspChecked": true
+}
