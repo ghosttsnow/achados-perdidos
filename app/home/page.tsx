@@ -23,7 +23,7 @@ interface Item {
 }
 
 export default function HomePage() {
-  const { user, signOut } = useAuth()
+  const { user, signOut, loading: authLoading } = useAuth()
   const router = useRouter()
   const [items, setItems] = useState<Item[]>([])
   const [filteredItems, setFilteredItems] = useState<Item[]>([])
@@ -33,10 +33,10 @@ export default function HomePage() {
   const [showMenu, setShowMenu] = useState(false)
 
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) {
       router.push('/')
     }
-  }, [user, router])
+  }, [user, authLoading, router])
 
   const fetchItems = () => {
     const all = getItems()

@@ -15,7 +15,7 @@ const categories = [
 ]
 
 export default function ReportarPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const router = useRouter()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -27,10 +27,10 @@ export default function ReportarPage() {
   const [success, setSuccess] = useState(false)
 
   useEffect(() => {
-    if (!user) {
+    if (!authLoading && !user) {
       router.push('/')
     }
-  }, [user, router])
+  }, [user, authLoading, router])
 
   useEffect(() => {
     if (user) {

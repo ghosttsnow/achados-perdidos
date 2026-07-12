@@ -3,12 +3,10 @@
 import { useState } from 'react'
 import { Mail, Lock, User, UserPlus, BookOpen, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 
 export default function CadastroPage() {
   const { signUp } = useAuth()
-  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [className, setClassName] = useState('')
@@ -37,7 +35,7 @@ export default function CadastroPage() {
     if (error) {
       setError(error.message)
     } else {
-      router.push('/home')
+      window.location.href = '/home'
     }
     setLoading(false)
   }

@@ -3,12 +3,10 @@
 import { useState, Suspense } from 'react'
 import { Mail, Lock, Eye, EyeOff, User, BookOpen } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 
 function LoginForm() {
   const { signIn } = useAuth()
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -24,8 +22,7 @@ function LoginForm() {
     if (error) {
       setError(error.message)
     } else {
-      document.cookie = 'cbn_session=1; path=/; max-age=2592000'
-      router.push('/home')
+      window.location.href = '/home'
     }
     setLoading(false)
   }
