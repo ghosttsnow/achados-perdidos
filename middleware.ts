@@ -1,20 +1,17 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const publicRoutes = ['/', '/cadastro', '/auth/callback']
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (publicRoutes.some(route => pathname.startsWith(route))) {
+  if (pathname === '/' || pathname === '/cadastro' || pathname.startsWith('/auth/')) {
     return NextResponse.next()
   }
 
   const session = request.cookies.get('cbn_session')
 
   if (!session) {
-    const loginUrl = new URL('/', request.url)
-    return NextResponse.redirect(loginUrl)
+    return NextResponse.redirect(new URL('/', request.url))
   }
 
   return NextResponse.next()

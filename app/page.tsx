@@ -1,27 +1,19 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { Mail, Lock, Eye, EyeOff, User, BookOpen } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 
 function LoginForm() {
-  const { signIn, user } = useAuth()
+  const { signIn } = useAuth()
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/home'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    if (user) {
-      router.push(redirect)
-    }
-  }, [user, router, redirect])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,7 +24,8 @@ function LoginForm() {
     if (error) {
       setError(error.message)
     } else {
-      router.push(redirect)
+      document.cookie = 'cbn_session=1; path=/; max-age=2592000'
+      router.push('/home')
     }
     setLoading(false)
   }
@@ -138,7 +131,7 @@ function LoginForm() {
   )
 }
 
-export default function HomePage() {
+export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50">
