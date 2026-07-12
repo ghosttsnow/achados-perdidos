@@ -47,6 +47,23 @@ export default function ReportarPage() {
     }
   }, [user])
 
+  function isRealWord(word: string): boolean {
+    const lower = word.toLowerCase()
+    
+    if (lower.length < 2) return false
+    
+    const repeatedChars = /(.)\1{2,}/
+    if (repeatedChars.test(lower)) return false
+    
+    const gibberishPatterns = /^[bcdfghjklmnpqrstvxyz]{3,}$/i
+    if (gibberishPatterns.test(lower)) return false
+    
+    const keyboardPatterns = /^(qwerty|asdf|zxcv|qazwsx|123|abc|def)/i
+    if (keyboardPatterns.test(lower)) return false
+    
+    return true
+  }
+
   function validateField(name: string, value: string): string | undefined {
     switch (name) {
       case 'title':
@@ -54,24 +71,53 @@ export default function ReportarPage() {
         if (value.trim().length < 3) return 'O nome deve ter pelo menos 3 caracteres'
         if (value.trim().length > 100) return 'O nome deve ter no máximo 100 caracteres'
         if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(value.trim())) return 'Use apenas letras e espaços'
+        
+        const words = value.trim().split(/\s+/)
+        if (words.length < 1) return 'Digite um nome válido para o item'
+        
+        for (const word of words) {
+          if (!isRealWord(word)) {
+            return 'Digite um nome real para o item (ex: Kimono, Caderneta, Mochila)'
+          }
+        }
         return undefined
       
       case 'description':
         if (!value.trim()) return 'A descrição é obrigatória'
         if (value.trim().length < 10) return 'A descrição deve ter pelo menos 10 caracteres'
         if (value.trim().length > 500) return 'A descrição deve ter no máximo 500 caracteres'
+        
+        const descWords = value.trim().split(/\s+/)
+        if (descWords.length < 3) return 'Adicione mais detalhes na descrição'
+        
         return undefined
       
       case 'location':
         if (!value.trim()) return 'O local é obrigatório'
         if (value.trim().length < 3) return 'O local deve ter pelo menos 3 caracteres'
         if (!/^[a-zA-ZÀ-ÿ\s0-9]+$/.test(value.trim())) return 'Use apenas letras, números e espaços'
+        
+        const locationWords = value.trim().split(/\s+/)
+        for (const word of locationWords) {
+          if (word.length >= 3 && !isRealWord(word)) {
+            return 'Digite um local válido (ex: Pátio, Sala 3B, Biblioteca)'
+          }
+        }
         return undefined
       
       case 'reported_by':
         if (!value.trim()) return 'Seu nome é obrigatório'
         if (value.trim().length < 3) return 'O nome deve ter pelo menos 3 caracteres'
         if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(value.trim())) return 'Use apenas letras e espaços'
+        
+        const nameWords = value.trim().split(/\s+/)
+        if (nameWords.length < 2) return 'Digite seu nome completo'
+        
+        for (const word of nameWords) {
+          if (!isRealWord(word)) {
+            return 'Digite um nome real (ex: João Silva)'
+          }
+        }
         return undefined
       
       case 'contact':
@@ -244,7 +290,7 @@ export default function ReportarPage() {
                 value={formData.title}
                 onChange={(e) => handleChange('title', e.target.value)}
                 onBlur={() => handleBlur('title')}
-                placeholder="Ex: Kimono preto, Caderneta azul..."
+                placeholder="Ex: Kimono preto, Caderneta azul, Mochila..."
                 className={getInputClasses('title')}
               />
               {getFieldStatus('title') === 'valid' && (
