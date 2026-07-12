@@ -147,6 +147,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+input, textarea, select {
+  caret-color: transparent;
+}
+
+input:focus, textarea:focus, select:focus {
+  caret-color: #2563eb;
+}
+
 :root {
   --primary: #2563eb;
   --primary-dark: #1d4ed8;
