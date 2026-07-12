@@ -8,7 +8,7 @@ import NotificationBell from './NotificationBell'
 import { useAuth } from '@/context/AuthContext'
 
 const navLinks = [
-  { href: '/', label: 'Início', icon: Home },
+  { href: '/home', label: 'Início', icon: Home },
   { href: '/galeria', label: 'Galeria', icon: Image },
   { href: '/reportar', label: 'Reportar', icon: Plus },
 ]

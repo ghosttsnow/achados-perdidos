@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const publicRoutes = ['/login', '/cadastro', '/auth/callback']
+const publicRoutes = ['/', '/cadastro', '/auth/callback']
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -13,7 +13,7 @@ export function middleware(request: NextRequest) {
   const session = request.cookies.get('cbn_session')
 
   if (!session) {
-    const loginUrl = new URL('/login', request.url)
+    const loginUrl = new URL('/', request.url)
     return NextResponse.redirect(loginUrl)
   }
 

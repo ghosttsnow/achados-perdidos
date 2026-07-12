@@ -70,7 +70,7 @@ export default function AdminLayout({
             </form>
 
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push('/home')}
               className="w-full mt-4 py-2 text-gray-600 text-sm hover:text-gray-900 transition-colors"
             >
               ← Voltar ao site

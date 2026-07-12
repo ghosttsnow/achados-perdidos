@@ -258,7 +258,7 @@ export default function ReportarPage() {
           Quando alguém encontrar, você será notificado por email.
         </p>
         <Link
-          href="/"
+          href="/home"
           className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-fade-in-up"
           style={{ animationDelay: '0.4s' }}
         >

@@ -28,7 +28,7 @@ export default function PerfilPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login')
+      router.push('/')
     }
     if (user) fetchUserItems()
   }, [user, authLoading])

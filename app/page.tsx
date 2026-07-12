@@ -1,139 +1,151 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Search, Plus, ArrowRight, Sparkles } from 'lucide-react'
+import { useState, useEffect, Suspense } from 'react'
+import { Mail, Lock, Eye, EyeOff, User, BookOpen } from 'lucide-react'
 import Link from 'next/link'
-import { getItems } from '@/lib/storage'
-import ItemCard from '@/components/ItemCard'
-import CategoryFilter from '@/components/CategoryFilter'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useAuth } from '@/context/AuthContext'
 
-interface Item {
-  id: string
-  title: string
-  description: string
-  category: string
-  photo_url: string | null
-  location: string
-  status: 'perdido' | 'encontrado' | 'devolvido'
-  reported_by: string
-  created_at: string
-}
-
-export default function Home() {
-  const [items, setItems] = useState<Item[]>([])
-  const [category, setCategory] = useState('todos')
-  const [loading, setLoading] = useState(true)
-  const [filtering, setFiltering] = useState(false)
+function LoginForm() {
+  const { signIn, user } = useAuth()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirect = searchParams.get('redirect') || '/home'
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
-    setFiltering(true)
-    const t = setTimeout(() => {
-      fetchItems()
-      setFiltering(false)
-    }, 250)
-    return () => clearTimeout(t)
-  }, [category])
+    if (user) {
+      router.push(redirect)
+    }
+  }, [user, router, redirect])
 
-  function fetchItems() {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
     setLoading(true)
-    const all = getItems().sort((a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    ).slice(0, 9)
-    setItems(category === 'todos' ? all : all.filter(i => i.category === category))
+
+    const { error } = await signIn(email, password)
+    if (error) {
+      setError(error.message)
+    } else {
+      router.push(redirect)
+    }
     setLoading(false)
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Hero Section */}
-      <section className="text-center mb-12 animate-fade-in-up">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-[#2563eb] text-sm font-medium mb-6">
-          <Sparkles className="w-4 h-4" />
-          Colégio Batista Nova Betânia
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 px-4 py-12">
+      <div className="w-full max-w-md animate-fade-in-up">
+        <div className="text-center mb-10 animate-fade-in-up">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-xl" style={{ background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)' }}>
+            <BookOpen className="w-10 h-10 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Bem-vindo!</h1>
+          <p className="text-gray-600">Entre na sua conta para acessar o sistema</p>
         </div>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-gray-900" style={{ textWrap: 'balance' }}>
-          Encontrou? <span className="text-[#2563eb]">Perdeu?</span>
-        </h1>
-        <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto" style={{ textWrap: 'pretty' }}>
-          A gente ajuda. Reporte itens perdidos ou veja se o seu já foi encontrado.
-        </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/reportar"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02] active:scale-95"
-          >
-            <Plus className="w-5 h-5" />
-            Reportar item perdido
-          </Link>
-          <Link
-            href="/galeria"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl font-semibold text-gray-700 bg-white border-2 border-gray-200 hover:border-[#2563eb] hover:text-[#2563eb] hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
-          >
-            <Search className="w-5 h-5" />
-            Ver itens achados
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="mb-12 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-2xl p-6 text-center border border-orange-100 max-w-xs mx-auto">
-          <div className="text-3xl md:text-4xl font-bold text-orange-600">0</div>
-          <div className="text-sm text-orange-700/70 font-medium mt-1">Itens perdidos</div>
-        </div>
-      </section>
-
-      {/* Filters */}
-      <section className="mb-8 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Itens recentes</h2>
-          <Link href="/galeria" className="text-sm font-medium text-[#2563eb] hover:text-[#1d4ed8] transition-colors">
-            Ver todos →
-          </Link>
-        </div>
-        <CategoryFilter selected={category} onChange={setCategory} />
-      </section>
-
-      {/* Items Grid */}
-      {loading || filtering ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 overflow-hidden animate-pulse shadow-sm" style={{ animationDelay: `${i * 100}ms` }}>
-              <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-50" />
-              <div className="p-4 space-y-3">
-                <div className="h-5 bg-gray-100 rounded-lg w-3/4" />
-                <div className="h-4 bg-gray-100 rounded-lg w-full" />
-                <div className="h-4 bg-gray-100 rounded-lg w-1/2" />
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="seu@email.com"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none bg-gray-50"
+                  disabled={loading}
+                />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               </div>
             </div>
-          ))}
-        </div>
-      ) : items.length === 0 ? (
-        <div className="text-center py-20 animate-fade-in-up">
-          <div className="relative inline-block mb-6">
-            <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-blue-50 to-blue-100/50 flex items-center justify-center mx-auto">
-              <Search className="w-12 h-12 text-[#2563eb]/40 animate-float" />
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full pl-12 pr-12 py-4 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all duration-200 outline-none bg-gray-50"
+                  disabled={loading}
+                />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {error && (
+              <div className="p-4 bg-red-50 border border-red-100 rounded-xl animate-fade-in">
+                <p className="text-red-600 text-sm text-center">{error}</p>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-4 rounded-xl font-semibold text-white text-lg bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
+            >
+              {loading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Entrando...
+                </>
+              ) : (
+                'Entrar'
+              )}
+            </button>
+          </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500">ou</span>
             </div>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">Nenhum item ainda</h3>
-          <p className="text-gray-500 mb-6">Seja o primeiro a reportar um item perdido!</p>
+
           <Link
-            href="/reportar"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl text-white font-semibold bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 transition-all duration-300 hover:scale-[1.02] active:scale-95"
+            href="/cadastro"
+            className="w-full py-4 rounded-xl font-semibold text-lg transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-3 border-2 border-gray-200 hover:border-[#2563eb] hover:text-[#2563eb] text-gray-700"
           >
-            <Plus className="w-5 h-5" />
-            Reportar item
+            <User className="w-5 h-5" />
+            Criar conta
           </Link>
+
+          <div className="mt-8 p-4 rounded-xl text-center bg-gradient-to-r from-blue-50 to-green-50 border border-blue-100">
+            <BookOpen className="w-5 h-5 mx-auto mb-2 text-[#2563eb]" />
+            <p className="text-sm text-gray-600">Colégio Batista Nova Betânia</p>
+          </div>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {items.map((item, i) => (
-            <ItemCard key={item.id} item={item} index={i} />
-          ))}
-        </div>
-      )}
+      </div>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50">
+        <div className="w-8 h-8 border-4 border-[#2563eb] border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
