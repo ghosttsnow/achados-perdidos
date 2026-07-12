@@ -262,7 +262,7 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${showForm ? 'max-h-[700px] opacity-100 mb-6' : 'max-h-0 opacity-0 mb-0'}`}>
+        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${showForm ? 'max-h-[1200px] opacity-100 mb-6' : 'max-h-0 opacity-0 mb-0'}`}>
           <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg animate-fade-in-up">
             {formSuccess ? (
               <div className="text-center py-12">
