@@ -14,6 +14,17 @@ interface AuthContextType {
   updateProfile: (data: { name?: string }) => Promise<{ error: Error | null }>
 }
 
+function setCookie(name: string, value: string, days: number) {
+  if (typeof document === 'undefined') return
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`
+}
+
+function deleteCookie(name: string) {
+  if (typeof document === 'undefined') return
+  document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -23,6 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const stored = getSession()
     if (stored) {
+      setCookie('cbn_session', '1', 30)
       setUser({
         id: stored.id,
         email: stored.email,
@@ -43,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
       const newUser = createUser(email, password, name, className)
       saveSession(newUser)
+      setCookie('cbn_session', '1', 30)
       setUser({
         id: newUser.id,
         email: newUser.email,
@@ -66,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return { error: new Error('Senha incorreta. Tente novamente.') }
     }
     saveSession(found)
+    setCookie('cbn_session', '1', 30)
     setUser({
       id: found.id,
       email: found.email,
@@ -79,6 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     clearSession()
+    deleteCookie('cbn_session')
     setUser(null)
   }
 
