@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Search, Plus, User, X, LogOut, BookOpen, Package, Home, Image } from 'lucide-react'
+import { Plus, User, X, LogOut, BookOpen, Package, Home, Image } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import NotificationBell from './NotificationBell'
 import { useAuth } from '@/context/AuthContext'
