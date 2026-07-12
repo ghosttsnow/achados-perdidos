@@ -78,18 +78,10 @@ export default function Home() {
       </section>
 
       {/* Stats */}
-      <section className="grid grid-cols-3 gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-2xl p-4 text-center border border-orange-100">
-          <div className="text-2xl md:text-3xl font-bold text-orange-600">0</div>
-          <div className="text-sm text-orange-700/70 font-medium">Perdidos</div>
-        </div>
-        <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-4 text-center border border-green-100">
-          <div className="text-2xl md:text-3xl font-bold text-green-600">0</div>
-          <div className="text-sm text-green-700/70 font-medium">Encontrados</div>
-        </div>
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-4 text-center border border-blue-100">
-          <div className="text-2xl md:text-3xl font-bold text-[#2563eb]">0</div>
-          <div className="text-sm text-blue-700/70 font-medium">Devolvidos</div>
+      <section className="mb-12 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-2xl p-6 text-center border border-orange-100 max-w-xs mx-auto">
+          <div className="text-3xl md:text-4xl font-bold text-orange-600">0</div>
+          <div className="text-sm text-orange-700/70 font-medium mt-1">Itens perdidos</div>
         </div>
       </section>
 
