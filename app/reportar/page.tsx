@@ -50,7 +50,7 @@ export default function ReportarPage() {
   function isRealWord(word: string): boolean {
     const lower = word.toLowerCase()
     
-    if (lower.length < 2) return false
+    if (lower.length < 3) return false
     
     const repeatedChars = /(.)\1{2,}/
     if (repeatedChars.test(lower)) return false
@@ -58,8 +58,14 @@ export default function ReportarPage() {
     const gibberishPatterns = /^[bcdfghjklmnpqrstvxyz]{3,}$/i
     if (gibberishPatterns.test(lower)) return false
     
-    const keyboardPatterns = /^(qwerty|asdf|zxcv|qazwsx|123|abc|def)/i
+    const keyboardPatterns = /^(qwerty|asdf|zxcv|qazwsx|123|abc|def|ghi|jkl|mno|pqr|stu|vwx|yza)/i
     if (keyboardPatterns.test(lower)) return false
+    
+    const vowels = lower.match(/[aeiou]/g) || []
+    const consonants = lower.match(/[bcdfghjklmnpqrstvxyz]/g) || []
+    
+    if (vowels.length === 0 && consonants.length >= 3) return false
+    if (consonants.length > vowels.length * 3) return false
     
     return true
   }
@@ -84,12 +90,7 @@ export default function ReportarPage() {
       
       case 'description':
         if (!value.trim()) return 'A descrição é obrigatória'
-        if (value.trim().length < 10) return 'A descrição deve ter pelo menos 10 caracteres'
         if (value.trim().length > 500) return 'A descrição deve ter no máximo 500 caracteres'
-        
-        const descWords = value.trim().split(/\s+/)
-        if (descWords.length < 3) return 'Adicione mais detalhes na descrição'
-        
         return undefined
       
       case 'location':
