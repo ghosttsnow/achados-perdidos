@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOpen, X, Search, TrendingUp, AlertTriangle, ClipboardCheck } from 'lucide-react'
+import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOpen, X, Search, TrendingUp, AlertTriangle, ClipboardCheck, ArrowLeft } from 'lucide-react'
 import { getItems, updateItemStatus, createNotification, createItem } from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
 import { initEmailJS, sendItemFoundEmail } from '@/lib/notify'
+import Link from 'next/link'
 
 const categories = [
   { value: 'uniforme', label: 'Uniforme', icon: Shirt },
@@ -183,120 +184,131 @@ export default function AdminPage() {
   }
 
   const statCards = [
-    { label: 'Total', value: stats.total, color: 'bg-gray-100 text-gray-700', icon: ClipboardCheck, delay: 100 },
-    { label: 'Perdidos', value: stats.perdidos, color: 'bg-orange-100 text-orange-700', icon: AlertTriangle, delay: 200 },
-    { label: 'Encontrados', value: stats.encontrados, color: 'bg-green-100 text-green-700', icon: Search, delay: 300 },
-    { label: 'Devolvidos', value: stats.devolvidos, color: 'bg-blue-100 text-blue-700', icon: TrendingUp, delay: 400 },
+    { label: 'Total', value: stats.total, color: 'text-slate-700', bg: 'bg-slate-50', icon: ClipboardCheck },
+    { label: 'Perdidos', value: stats.perdidos, color: 'text-orange-500', bg: 'bg-orange-50', icon: AlertTriangle },
+    { label: 'Encontrados', value: stats.encontrados, color: 'text-emerald-500', bg: 'bg-emerald-50', icon: Search },
+    { label: 'Devolvidos', value: stats.devolvidos, color: 'text-[#2563eb]', bg: 'bg-blue-50', icon: TrendingUp },
   ]
 
   const statusFilters = ['todos', 'perdido', 'encontrado', 'devolvido'] as const
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="animate-fade-in-up">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div className="animate-slide-in-left">
-            <h1 className="text-3xl font-bold flex items-center gap-3" style={{ color: '#1e3a5f' }}>
-              <Package className="w-8 h-8 animate-float" style={{ color: '#1e3a5f' }} />
-              Painel Admin
-            </h1>
-            <p className="text-gray-600 mt-1">Gerencie os itens achados e perdidos da escola</p>
+    <div className="min-h-screen bg-[#f8fafc]">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-4">
+              <Link
+                href="/"
+                className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-all duration-200"
+              >
+                <ArrowLeft className="w-4 h-4" strokeWidth={2} />
+              </Link>
+              <div>
+                <h1 className="text-base font-bold text-slate-900 tracking-tight">Painel Admin</h1>
+                <p className="text-[11px] text-slate-400 font-medium">Gerencie itens achados e perdidos</p>
+              </div>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+            >
+              <LogOut className="w-4 h-4" strokeWidth={2} />
+              <span className="hidden sm:inline">Sair</span>
+            </button>
           </div>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-5 py-2.5 text-gray-600 hover:text-red-600 border border-gray-300 rounded-xl hover:border-red-200 hover:bg-red-50 transition-all duration-300 group animate-slide-in-right"
-          >
-            <LogOut className="w-4 h-4 transition-transform duration-300 group-hover:-translate-x-1" />
-            Sair
-          </button>
         </div>
+      </header>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 animate-fade-in-up">
           {statCards.map((stat) => {
             const Icon = stat.icon
             return (
               <div
                 key={stat.label}
-                className={`rounded-xl p-5 ${stat.color} transition-all duration-300 hover:scale-[1.05] hover:shadow-lg cursor-default animate-fade-in-up`}
-                style={{ animationDelay: `${stat.delay}ms` }}
+                className={`${stat.bg} rounded-xl p-4 transition-all duration-300 hover:scale-[1.03] cursor-default`}
               >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium opacity-75">{stat.label}</p>
-                    <p className="text-2xl font-bold mt-1 transition-all duration-300">{stat.value}</p>
-                  </div>
-                  <Icon className="w-8 h-8 opacity-30" />
+                <div className="flex items-center justify-between mb-2">
+                  <Icon className={`w-5 h-5 ${stat.color}`} strokeWidth={2} />
                 </div>
+                <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                <p className="text-xs font-medium text-slate-500 mt-0.5">{stat.label}</p>
               </div>
             )
           })}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        {/* Actions Bar */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <button
             onClick={() => setShowForm(!showForm)}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl text-white font-medium transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg shadow-blue-900/20 ${showForm ? 'bg-red-500 hover:bg-red-600' : ''}`}
-            style={showForm ? {} : { backgroundColor: '#1e3a5f' }}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
+              showForm
+                ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
+                : 'bg-[#2563eb] text-white shadow-sm shadow-blue-500/25 hover:bg-[#1d4ed8] hover:shadow-md'
+            }`}
           >
-            <Plus className={`w-5 h-5 transition-transform duration-300 ${showForm ? 'rotate-45' : ''}`} />
-            {showForm ? 'Fechar formulário' : 'Reportar Item Encontrado'}
+            <Plus className={`w-4 h-4 transition-transform duration-200 ${showForm ? 'rotate-45' : ''}`} strokeWidth={2.5} />
+            {showForm ? 'Fechar' : 'Item Encontrado'}
           </button>
 
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <div className="relative flex-1 max-w-sm">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar itens..."
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none bg-white"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#2563eb] focus:ring-4 focus:ring-blue-50 focus:outline-none transition-all duration-200"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3 h-3" strokeWidth={2.5} />
               </button>
             )}
           </div>
         </div>
 
-        <div className={`overflow-hidden transition-all duration-500 ease-in-out ${showForm ? 'max-h-[1200px] opacity-100 mb-6' : 'max-h-0 opacity-0 mb-0'}`}>
-          <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg animate-fade-in-up">
+        {/* Form */}
+        <div className={`overflow-hidden transition-all duration-400 ease-out ${showForm ? 'max-h-[1200px] opacity-100 mb-6' : 'max-h-0 opacity-0 mb-0'}`}>
+          <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm animate-fade-in-up">
             {formSuccess ? (
               <div className="text-center py-12">
-                <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4 animate-bounce-in">
-                  <CheckCircle className="w-10 h-10 text-green-500" />
+                <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-4 animate-bounce-in">
+                  <CheckCircle className="w-8 h-8 text-emerald-500" strokeWidth={1.5} />
                 </div>
-                <p className="text-xl font-semibold text-gray-900 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>Item reportado com sucesso!</p>
-                <p className="text-gray-500 mt-2 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>O item já aparece na galeria como encontrado.</p>
+                <p className="text-lg font-semibold text-slate-900">Item reportado!</p>
+                <p className="text-sm text-slate-500 mt-1">O item já aparece na galeria.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-lg font-semibold flex items-center gap-2" style={{ color: '#1e3a5f' }}>
-                      <Package className="w-5 h-5" />
-                      Novo Item Encontrado
-                    </h2>
-                    <p className="text-sm text-gray-500">Preencha os dados do item que foi encontrado na escola.</p>
-                  </div>
+                <div>
+                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Package className="w-4 h-4 text-[#2563eb]" strokeWidth={2} />
+                    Novo Item Encontrado
+                  </h2>
+                  <p className="text-xs text-slate-500 mt-0.5">Preencha os dados do item encontrado.</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Nome do item *</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">Nome do item *</label>
                     <input
                       type="text" required
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                      placeholder="Ex: Kimono preto, Caderneta azul..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-gray-400"
+                      placeholder="Ex: Kimono preto, Caderneta..."
+                      className="input-premium"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Categoria *</label>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">Categoria *</label>
                     <div className="flex gap-2">
                       {categories.map((cat) => {
                         const Icon = cat.icon
@@ -305,14 +317,14 @@ export default function AdminPage() {
                           <button
                             key={cat.value} type="button"
                             onClick={() => setFormData({ ...formData, category: cat.value })}
-                            className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border-2 transition-all duration-200 text-sm font-medium ${
+                            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 transition-all duration-200 text-xs font-medium ${
                               isSelected
-                                ? 'border-blue-500 bg-blue-50 text-blue-700 shadow-sm'
-                                : 'border-gray-200 hover:border-gray-300 text-gray-600 hover:bg-gray-50'
+                                ? 'border-[#2563eb] bg-blue-50 text-[#2563eb]'
+                                : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
                             }`}
                           >
-                            <Icon className="w-4 h-4" />
-                            <span>{cat.label}</span>
+                            <Icon className="w-3.5 h-3.5" strokeWidth={2} />
+                            <span className="hidden sm:inline">{cat.label}</span>
                           </button>
                         )
                       })}
@@ -320,72 +332,70 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Descrição *</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-slate-700">Descrição *</label>
                   <textarea
                     required rows={2}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Descreva o item: cor, marca, detalhes..."
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none resize-none hover:border-gray-400"
+                    placeholder="Descreva: cor, marca, detalhes..."
+                    className="input-premium resize-none"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Local *</label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">Local *</label>
                     <input
                       type="text" required
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                       placeholder="Ex: Pátio, Sala 201..."
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-gray-400"
+                      className="input-premium"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Quem encontrou</label>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">Quem encontrou</label>
                     <input
                       type="text"
                       value={formData.reported_by}
                       onChange={(e) => setFormData({ ...formData, reported_by: e.target.value })}
                       placeholder="Seu nome"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-gray-400"
+                      className="input-premium"
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Contato</label>
+                  <div className="space-y-1.5">
+                    <label className="text-sm font-semibold text-slate-700">Contato</label>
                     <input
                       type="text"
                       value={formData.contact}
                       onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
                       placeholder="Tel ou sala"
-                      className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none hover:border-gray-400"
+                      className="input-premium"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Foto</label>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-semibold text-slate-700">Foto</label>
                   <div className="flex items-center gap-4">
-                    <label className="flex items-center gap-2.5 px-5 py-3 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-100 hover:border-gray-400 transition-all duration-200 group">
-                      <Upload className="w-5 h-5 text-gray-500 group-hover:text-gray-700 transition-colors" />
-                      <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors">
+                    <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-slate-200 bg-white hover:border-[#2563eb] hover:bg-blue-50/50 cursor-pointer transition-all duration-200 group">
+                      <Upload className="w-4 h-4 text-slate-400 group-hover:text-[#2563eb] transition-colors" strokeWidth={2} />
+                      <span className="text-sm text-slate-500 group-hover:text-[#2563eb] transition-colors font-medium">
                         {photoPreview ? 'Trocar foto' : 'Enviar foto'}
                       </span>
                       <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                     </label>
                     {photoPreview && (
-                      <div className="flex items-center gap-2 animate-scale-in">
-                        <div className="relative group">
-                          <img src={photoPreview} alt="Preview" className="w-14 h-14 rounded-xl object-cover ring-2 ring-gray-200" />
-                          <button
-                            type="button"
-                            onClick={() => setPhotoPreview(null)}
-                            className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
+                      <div className="relative group animate-scale-in">
+                        <img src={photoPreview} alt="Preview" className="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-100" />
+                        <button
+                          type="button"
+                          onClick={() => setPhotoPreview(null)}
+                          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                        >
+                          <X className="w-3 h-3" strokeWidth={2.5} />
+                        </button>
                       </div>
                     )}
                   </div>
@@ -394,8 +404,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-2 px-8 py-3.5 rounded-xl text-white font-medium transition-all duration-300 hover:scale-[1.03] active:scale-95 disabled:opacity-60 disabled:hover:scale-100 shadow-lg"
-                  style={{ backgroundColor: '#1e3a5f' }}
+                  className="btn-primary"
                 >
                   {submitting ? (
                     <>
@@ -404,7 +413,7 @@ export default function AdminPage() {
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
+                      <Send className="w-4 h-4" strokeWidth={2} />
                       Reportar Item Encontrado
                     </>
                   )}
@@ -414,118 +423,111 @@ export default function AdminPage() {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 mb-6">
+        {/* Status Filters */}
+        <div className="flex flex-wrap gap-2 mb-6 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
           {statusFilters.map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}
-              className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 animate-fade-in-up ${
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 filter === status
-                  ? 'text-white shadow-lg shadow-blue-900/20 scale-105'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-300 hover:shadow-md hover:-translate-y-0.5'
+                  ? 'bg-[#2563eb] text-white shadow-sm shadow-blue-500/25'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
               }`}
-              style={filter === status ? { backgroundColor: '#1e3a5f' } : {}}
             >
               {statusLabels[status]} ({stats[status as keyof typeof stats]})
             </button>
           ))}
         </div>
 
+        {/* Items List */}
         {loading ? (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-2xl border border-gray-200 p-6 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
+              <div key={i} className="bg-white rounded-xl border border-slate-100 p-5 animate-pulse">
                 <div className="flex gap-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-xl" />
-                  <div className="flex-1 space-y-3">
-                    <div className="h-5 bg-gray-200 rounded w-1/3" />
-                    <div className="h-4 bg-gray-200 rounded w-1/2" />
-                    <div className="h-3 bg-gray-200 rounded w-1/4" />
+                  <div className="w-14 h-14 bg-slate-100 rounded-xl" />
+                  <div className="flex-1 space-y-2">
+                    <div className="h-4 bg-slate-100 rounded w-1/3" />
+                    <div className="h-3 bg-slate-100 rounded w-1/2" />
                   </div>
                 </div>
               </div>
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="text-center py-20 animate-fade-in-up">
-            <div className="relative inline-block">
-              <Package className="w-20 h-20 text-gray-200 mx-auto mb-4 animate-float" />
-              <Search className="w-8 h-8 text-gray-300 absolute -bottom-2 -right-2 animate-pulse-subtle" />
+          <div className="text-center py-16 animate-fade-in">
+            <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
+              <Package className="w-7 h-7 text-slate-300" strokeWidth={1.5} />
             </div>
-            <h3 className="text-xl font-medium text-gray-900 mb-2">
+            <h3 className="text-lg font-semibold text-slate-900 mb-1">
               {searchQuery ? 'Nenhum resultado' : 'Nenhum item'}
             </h3>
-            <p className="text-gray-500">
-              {searchQuery
-                ? `Nenhum item encontrado para "${searchQuery}"`
-                : 'Nenhum item encontrado com este filtro.'}
+            <p className="text-sm text-slate-500">
+              {searchQuery ? `Nenhum item para "${searchQuery}"` : 'Nenhum item com este filtro.'}
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filteredItems.map((item, idx) => (
               <div
                 key={item.id}
-                className="bg-white rounded-2xl border border-gray-200 p-4 md:p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5 animate-fade-in-up group"
-                style={{ animationDelay: `${idx * 80}ms` }}
+                className="bg-white rounded-xl border border-slate-100 p-4 sm:p-5 hover:shadow-md hover:border-slate-200 transition-all duration-300 animate-fade-in-up group"
+                style={{ animationDelay: `${idx * 0.04}s` }}
               >
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="w-full md:w-20 h-32 md:h-20 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Photo */}
+                  <div className="w-full sm:w-16 h-32 sm:h-16 bg-slate-50 rounded-xl overflow-hidden flex-shrink-0">
                     {item.photo_url ? (
                       <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-400">
-                        <Package className="w-8 h-8" />
+                      <div className="w-full h-full flex items-center justify-center text-slate-300">
+                        <Package className="w-6 h-6" strokeWidth={1.5} />
                       </div>
                     )}
                   </div>
 
+                  {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="font-semibold text-gray-900 text-lg group-hover:text-blue-900 transition-colors duration-200">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <h3 className="font-semibold text-slate-900 group-hover:text-[#2563eb] transition-colors">
                         {item.title}
                       </h3>
                       <StatusBadge status={item.status} />
                     </div>
-                    <p className="text-sm text-gray-600 mb-2 line-clamp-2">{item.description}</p>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                        {item.reported_by}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                        {item.location}
-                      </span>
+                    <p className="text-sm text-slate-500 line-clamp-1 mb-2">{item.description}</p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-400">
+                      <span>{item.reported_by}</span>
+                      <span>·</span>
+                      <span>{item.location}</span>
                       {item.contact && (
-                        <span className="flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                          {item.contact}
-                        </span>
+                        <>
+                          <span>·</span>
+                          <span>{item.contact}</span>
+                        </>
                       )}
-                      <span className="flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                        {new Date(item.created_at).toLocaleDateString('pt-BR')}
-                      </span>
+                      <span>·</span>
+                      <span>{new Date(item.created_at).toLocaleDateString('pt-BR')}</span>
                     </div>
                   </div>
 
-                  <div className="flex md:flex-col gap-2 flex-shrink-0">
+                  {/* Actions */}
+                  <div className="flex sm:flex-col gap-2 flex-shrink-0">
                     {item.status === 'perdido' && (
                       <button
                         onClick={() => handleUpdateStatus(item.id, 'encontrado')}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 hover:shadow-md transition-all duration-200 text-sm font-medium active:scale-95"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-sm font-medium hover:bg-emerald-100 active:scale-[0.98] transition-all duration-200"
                       >
-                        <CheckCircle className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+                        <CheckCircle className="w-3.5 h-3.5" strokeWidth={2} />
                         Encontrei
                       </button>
                     )}
                     {item.status === 'encontrado' && (
                       <button
                         onClick={() => handleUpdateStatus(item.id, 'devolvido')}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 hover:shadow-md transition-all duration-200 text-sm font-medium active:scale-95"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 text-[#2563eb] text-sm font-medium hover:bg-blue-100 active:scale-[0.98] transition-all duration-200"
                       >
-                        <CheckCircle className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
+                        <CheckCircle className="w-3.5 h-3.5" strokeWidth={2} />
                         Devolvido
                       </button>
                     )}
@@ -535,27 +537,28 @@ export default function AdminPage() {
             ))}
           </div>
         )}
-      </div>
+      </main>
 
+      {/* Toasts */}
       <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl text-sm font-medium animate-slide-in-right ${
-              toast.type === 'success' ? 'bg-green-600 text-white' : 'bg-blue-600 text-white'
+            className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg text-sm font-medium animate-slide-in-right ${
+              toast.type === 'success' ? 'bg-slate-900 text-white' : 'bg-[#2563eb] text-white'
             }`}
           >
             {toast.type === 'success' ? (
-              <CheckCircle className="w-5 h-5" />
+              <CheckCircle className="w-4 h-4" strokeWidth={2} />
             ) : (
-              <Package className="w-5 h-5" />
+              <Package className="w-4 h-4" strokeWidth={2} />
             )}
             {toast.message}
             <button
               onClick={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
-              className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+              className="ml-1 opacity-60 hover:opacity-100 transition-opacity"
             >
-              <X className="w-4 h-4" />
+              <X className="w-3.5 h-3.5" strokeWidth={2.5} />
             </button>
           </div>
         ))}

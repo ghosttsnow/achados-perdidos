@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { Lock } from 'lucide-react'
+import { Lock, ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
 
 const ADMIN_PASSWORD = 'achados2024'
 
@@ -14,7 +14,6 @@ export default function AdminLayout({
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
-  const router = useRouter()
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem('admin-auth')
@@ -36,45 +35,46 @@ export default function AdminLayout({
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#1e3a5f' }}>
-                <Lock className="w-8 h-8 text-white" />
+      <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] px-4">
+        <div className="w-full max-w-sm animate-scale-in">
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+            <div className="text-center mb-8">
+              <div className="w-14 h-14 rounded-2xl bg-[#2563eb] flex items-center justify-center mx-auto mb-4 shadow-sm shadow-blue-500/20">
+                <Lock className="w-6 h-6 text-white" strokeWidth={2} />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Painel Admin</h1>
-              <p className="text-gray-600 mt-1">Digite a senha para acessar</p>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">Painel Admin</h1>
+              <p className="text-sm text-slate-500 mt-1">Digite a senha para acessar</p>
             </div>
 
-            <form onSubmit={handleLogin}>
-              <div className="mb-4">
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Senha"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none"
+                  placeholder="Digite a senha"
+                  className="input-premium"
+                  autoFocus
                 />
                 {error && (
-                  <p className="text-red-500 text-sm mt-2">{error}</p>
+                  <p className="text-red-500 text-sm mt-2 animate-shake">{error}</p>
                 )}
               </div>
               <button
                 type="submit"
-                className="w-full py-3 rounded-lg text-white font-medium transition-all duration-200 hover:scale-[1.02]"
-                style={{ backgroundColor: '#1e3a5f' }}
+                className="btn-primary w-full"
               >
                 Entrar
               </button>
             </form>
 
-            <button
-              onClick={() => router.push('/home')}
-              className="w-full mt-4 py-2 text-gray-600 text-sm hover:text-gray-900 transition-colors"
+            <Link
+              href="/"
+              className="flex items-center justify-center gap-2 w-full mt-4 py-2 text-sm text-slate-500 hover:text-slate-700 transition-colors"
             >
-              ← Voltar ao site
-            </button>
+              <ArrowLeft className="w-4 h-4" strokeWidth={2} />
+              Voltar ao site
+            </Link>
           </div>
         </div>
       </div>

@@ -1,9 +1,9 @@
 'use client'
 
-import { Shirt, Laptop, BookOpen, Package } from 'lucide-react'
+import { Shirt, Laptop, BookOpen, Package, Grid3X3 } from 'lucide-react'
 
 const categories = [
-  { value: 'todos', label: 'Todos', icon: Package },
+  { value: 'todos', label: 'Todos', icon: Grid3X3 },
   { value: 'uniforme', label: 'Uniforme', icon: Shirt },
   { value: 'eletronico', label: 'Eletrônico', icon: Laptop },
   { value: 'material', label: 'Material', icon: BookOpen },
@@ -17,7 +17,7 @@ interface CategoryFilterProps {
 
 export default function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap justify-center gap-2">
       {categories.map((cat) => {
         const Icon = cat.icon
         const isActive = selected === cat.value
@@ -25,13 +25,13 @@ export default function CategoryFilter({ selected, onChange }: CategoryFilterPro
           <button
             key={cat.value}
             onClick={() => onChange(cat.value)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               isActive
-                ? 'bg-[#2563eb] text-white shadow-md shadow-blue-500/25'
-                : 'bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300'
+                ? 'bg-[#2563eb] text-white shadow-sm shadow-blue-500/25'
+                : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900'
             }`}
           >
-            <Icon className="w-4 h-4" />
+            <Icon className="w-4 h-4" strokeWidth={2} />
             {cat.label}
           </button>
         )

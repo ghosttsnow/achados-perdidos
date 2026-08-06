@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, CheckCircle, Upload, X } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Upload, X, User, FileText, MapPin, Mail, Tag } from 'lucide-react'
 import Link from 'next/link'
 import { createItem } from '@/lib/storage'
 
@@ -55,16 +55,18 @@ export default function ReportarPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4">
-        <div className="text-center animate-fade-in-up">
-          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-green-600" />
+      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center px-4">
+        <div className="text-center animate-scale-in max-w-sm">
+          <div className="w-20 h-20 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-10 h-10 text-emerald-500" strokeWidth={1.5} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Item reportado!</h1>
-          <p className="text-gray-600 mb-8">Quando alguém encontrar, você será notificado.</p>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">Item reportado!</h1>
+          <p className="text-slate-500 text-sm mb-8 leading-relaxed">
+            Quando alguém encontrar, você será notificado por email.
+          </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563eb] text-white font-medium hover:shadow-lg transition-all"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563eb] text-white font-semibold text-sm shadow-lg shadow-blue-500/25 hover:bg-[#1d4ed8] hover:shadow-xl transition-all duration-200 active:scale-[0.98]"
           >
             Voltar ao início
           </Link>
@@ -74,141 +76,179 @@ export default function ReportarPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Link
-            href="/"
-            className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
-          </Link>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Reportar item perdido</h1>
-            <p className="text-gray-500">Descreva o item que você perdeu</p>
+    <div className="min-h-screen bg-[#f8fafc]">
+      {/* Header */}
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center gap-4 h-16">
+            <Link
+              href="/"
+              className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-all duration-200"
+            >
+              <ArrowLeft className="w-4 h-4" strokeWidth={2} />
+            </Link>
+            <div>
+              <h1 className="text-base font-bold text-slate-900 tracking-tight">Reportar item perdido</h1>
+              <p className="text-xs text-slate-400">Descreva o item para ajudar a encontrar</p>
+            </div>
           </div>
         </div>
+      </header>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Seu nome *</label>
+      {/* Form */}
+      <main className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+        <form onSubmit={handleSubmit} className="space-y-5 animate-fade-in-up">
+          {/* Name */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <User className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Seu nome
+            </label>
             <input
               type="text"
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Seu nome"
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+              placeholder="Como você se chama?"
+              className="input-premium"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Título *</label>
+          {/* Title */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <FileText className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Título do item
+            </label>
             <input
               type="text"
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Ex: Caderno azul"
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+              placeholder="Ex: Caderno azul, Kimono preto..."
+              className="input-premium"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Descrição *</label>
+          {/* Description */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <FileText className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Descrição
+            </label>
             <textarea
               required
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Descreva o item com detalhes..."
+              placeholder="Descreva o item com detalhes: cor, marca, características..."
               rows={3}
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none resize-none"
+              className="input-premium resize-none"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Categoria *</label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none bg-white"
-            >
-              {categories.map(cat => (
-                <option key={cat.value} value={cat.value}>{cat.label}</option>
+          {/* Category */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <Tag className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Categoria
+            </label>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.value}
+                  type="button"
+                  onClick={() => setCategory(cat.value)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all duration-200 ${
+                    category === cat.value
+                      ? 'border-[#2563eb] bg-blue-50 text-[#2563eb]'
+                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
+                  }`}
+                >
+                  {cat.label}
+                </button>
               ))}
-            </select>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Local *</label>
+          {/* Location */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <MapPin className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Local
+            </label>
             <input
               type="text"
               required
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              placeholder="Ex: Sala 5, Biblioteca"
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+              placeholder="Ex: Sala 5, Biblioteca, Pátio..."
+              className="input-premium"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Contato (email)</label>
+          {/* Contact */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <Mail className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Email para contato
+            </label>
             <input
               type="email"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               placeholder="seu@email.com"
-              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+              className="input-premium"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Foto (opcional)</label>
-            <label className="flex items-center justify-center gap-2 w-full px-4 py-8 rounded-xl border-2 border-dashed border-gray-300 hover:border-[#2563eb] cursor-pointer transition-colors">
-              {photo ? (
-                <div className="relative">
-                  <img src={photo} alt="Preview" className="max-h-32 rounded-lg" />
-                  <button
-                    type="button"
-                    onClick={() => setPhoto(null)}
-                    className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              ) : (
-                <>
-                  <Upload className="w-5 h-5 text-gray-400" />
-                  <span className="text-sm text-gray-500">Adicionar foto</span>
-                </>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoUpload}
-                className="hidden"
-              />
+          {/* Photo */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+              <Upload className="w-4 h-4 text-slate-400" strokeWidth={2} />
+              Foto <span className="text-slate-400 font-normal">(opcional)</span>
             </label>
+            {photo ? (
+              <div className="relative inline-block">
+                <img src={photo} alt="Preview" className="h-32 rounded-xl object-cover ring-2 ring-slate-100" />
+                <button
+                  type="button"
+                  onClick={() => setPhoto(null)}
+                  className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-sm hover:bg-red-600 transition-colors"
+                >
+                  <X className="w-3.5 h-3.5" strokeWidth={2.5} />
+                </button>
+              </div>
+            ) : (
+              <label className="flex items-center justify-center gap-3 w-full px-4 py-8 rounded-xl border-2 border-dashed border-slate-200 bg-white hover:border-[#2563eb] hover:bg-blue-50/50 cursor-pointer transition-all duration-200 group">
+                <Upload className="w-5 h-5 text-slate-400 group-hover:text-[#2563eb] transition-colors" strokeWidth={2} />
+                <span className="text-sm text-slate-500 group-hover:text-[#2563eb] transition-colors font-medium">Clique para adicionar foto</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+              </label>
+            )}
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-4 rounded-xl font-semibold text-white bg-gradient-to-r from-[#2563eb] to-[#1d4ed8] shadow-lg shadow-blue-500/25 hover:shadow-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="btn-primary w-full py-3.5 mt-4"
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 Enviando...
               </>
             ) : (
-              'Reportar item'
+              'Reportar item perdido'
             )}
           </button>
         </form>
-      </div>
+      </main>
     </div>
   )
 }
