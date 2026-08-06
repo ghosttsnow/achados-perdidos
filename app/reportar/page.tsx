@@ -1,10 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ArrowLeft, CheckCircle, Upload, X } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@/context/AuthContext'
 import { createItem } from '@/lib/storage'
 
 const categories = [
@@ -15,28 +13,15 @@ const categories = [
 ]
 
 export default function ReportarPage() {
-  const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('uniforme')
   const [location, setLocation] = useState('')
   const [contact, setContact] = useState('')
+  const [name, setName] = useState('')
   const [photo, setPhoto] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
-
-  useEffect(() => {
-    if (!authLoading && !user) {
-      router.push('/')
-    }
-  }, [user, authLoading, router])
-
-  useEffect(() => {
-    if (user) {
-      setContact(user.email || '')
-    }
-  }, [user])
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -61,7 +46,7 @@ export default function ReportarPage() {
       contact,
       photo_url: photo,
       status: 'perdido',
-      reported_by: user?.user_metadata?.name || 'Anônimo',
+      reported_by: name || 'Anônimo',
     })
 
     setSuccess(true)
@@ -78,7 +63,7 @@ export default function ReportarPage() {
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Item reportado!</h1>
           <p className="text-gray-600 mb-8">Quando alguém encontrar, você será notificado.</p>
           <Link
-            href="/home"
+            href="/"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563eb] text-white font-medium hover:shadow-lg transition-all"
           >
             Voltar ao início
@@ -94,7 +79,7 @@ export default function ReportarPage() {
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Link
-            href="/home"
+            href="/"
             className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-600" />
@@ -107,6 +92,18 @@ export default function ReportarPage() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Seu nome *</label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Seu nome"
+              className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#2563eb] focus:ring-2 focus:ring-blue-100 transition-all outline-none"
+            />
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Título *</label>
             <input
