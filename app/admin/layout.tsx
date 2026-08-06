@@ -39,7 +39,7 @@ export default function AdminLayout({
         <div className="w-full max-w-sm animate-scale-in">
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
             <div className="text-center mb-8">
-              <div className="w-14 h-14 rounded-2xl bg-[#2563eb] flex items-center justify-center mx-auto mb-4 shadow-sm shadow-blue-500/20">
+              <div className="w-14 h-14 rounded-2xl bg-[#16a34a] flex items-center justify-center mx-auto mb-4 shadow-sm shadow-green-500/20">
                 <Lock className="w-6 h-6 text-white" strokeWidth={2} />
               </div>
               <h1 className="text-xl font-bold text-slate-900 tracking-tight">Painel Admin</h1>

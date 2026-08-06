@@ -186,7 +186,7 @@ export default function AdminPage() {
   const statCards = [
     { label: 'Total', value: stats.total, color: 'text-slate-700', bg: 'bg-slate-50', icon: ClipboardCheck },
     { label: 'Perdidos', value: stats.perdidos, color: 'text-orange-500', bg: 'bg-orange-50', icon: AlertTriangle },
-    { label: 'Encontrados', value: stats.encontrados, color: 'text-emerald-500', bg: 'bg-emerald-50', icon: Search },
+    { label: 'Encontrados', value: stats.encontrados, color: 'text-[#16a34a]', bg: 'bg-green-50', icon: Search },
     { label: 'Devolvidos', value: stats.devolvidos, color: 'text-[#2563eb]', bg: 'bg-blue-50', icon: TrendingUp },
   ]
 
@@ -248,7 +248,7 @@ export default function AdminPage() {
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
               showForm
                 ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
-                : 'bg-[#2563eb] text-white shadow-sm shadow-blue-500/25 hover:bg-[#1d4ed8] hover:shadow-md'
+                : 'bg-[#16a34a] text-white shadow-sm shadow-green-500/25 hover:bg-[#15803d] hover:shadow-md'
             }`}
           >
             <Plus className={`w-4 h-4 transition-transform duration-200 ${showForm ? 'rotate-45' : ''}`} strokeWidth={2.5} />
@@ -262,7 +262,7 @@ export default function AdminPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar itens..."
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#2563eb] focus:ring-4 focus:ring-blue-50 focus:outline-none transition-all duration-200"
+              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
             />
             {searchQuery && (
               <button
@@ -431,7 +431,7 @@ export default function AdminPage() {
               onClick={() => setFilter(status)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                 filter === status
-                  ? 'bg-[#2563eb] text-white shadow-sm shadow-blue-500/25'
+                  ? 'bg-[#16a34a] text-white shadow-sm shadow-green-500/25'
                   : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
               }`}
             >
@@ -490,7 +490,7 @@ export default function AdminPage() {
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-semibold text-slate-900 group-hover:text-[#2563eb] transition-colors">
+                      <h3 className="font-semibold text-slate-900 group-hover:text-[#16a34a] transition-colors">
                         {item.title}
                       </h3>
                       <StatusBadge status={item.status} />

@@ -66,7 +66,7 @@ export default function ReportarPage() {
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#2563eb] text-white font-semibold text-sm shadow-lg shadow-blue-500/25 hover:bg-[#1d4ed8] hover:shadow-xl transition-all duration-200 active:scale-[0.98]"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#16a34a] text-white font-semibold text-sm shadow-lg shadow-green-500/25 hover:bg-[#15803d] hover:shadow-xl transition-all duration-200 active:scale-[0.98]"
           >
             Voltar ao início
           </Link>
@@ -160,7 +160,7 @@ export default function ReportarPage() {
                   onClick={() => setCategory(cat.value)}
                   className={`px-4 py-2.5 rounded-xl text-sm font-medium border-2 transition-all duration-200 ${
                     category === cat.value
-                      ? 'border-[#2563eb] bg-blue-50 text-[#2563eb]'
+                      ? 'border-[#16a34a] bg-green-50 text-[#16a34a]'
                       : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
@@ -219,9 +219,9 @@ export default function ReportarPage() {
                 </button>
               </div>
             ) : (
-              <label className="flex items-center justify-center gap-3 w-full px-4 py-8 rounded-xl border-2 border-dashed border-slate-200 bg-white hover:border-[#2563eb] hover:bg-blue-50/50 cursor-pointer transition-all duration-200 group">
-                <Upload className="w-5 h-5 text-slate-400 group-hover:text-[#2563eb] transition-colors" strokeWidth={2} />
-                <span className="text-sm text-slate-500 group-hover:text-[#2563eb] transition-colors font-medium">Clique para adicionar foto</span>
+              <label className="flex items-center justify-center gap-3 w-full px-4 py-8 rounded-xl border-2 border-dashed border-slate-200 bg-white hover:border-[#16a34a] hover:bg-green-50/50 cursor-pointer transition-all duration-200 group">
+                <Upload className="w-5 h-5 text-slate-400 group-hover:text-[#16a34a] transition-colors" strokeWidth={2} />
+                <span className="text-sm text-slate-500 group-hover:text-[#16a34a] transition-colors font-medium">Clique para adicionar foto</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -236,7 +236,7 @@ export default function ReportarPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full py-3.5 mt-4"
+            className="w-full py-3.5 rounded-xl bg-[#16a34a] text-white font-semibold text-sm shadow-lg shadow-green-500/25 hover:bg-[#15803d] hover:shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 mt-4"
           >
             {loading ? (
               <>

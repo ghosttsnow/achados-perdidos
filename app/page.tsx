@@ -56,7 +56,7 @@ export default function HomePage() {
 
   const stats = [
     { label: 'Perdidos', value: items.filter(i => i.status === 'perdido').length, color: 'text-orange-500', bg: 'bg-orange-50' },
-    { label: 'Encontrados', value: items.filter(i => i.status === 'encontrado').length, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { label: 'Encontrados', value: items.filter(i => i.status === 'encontrado').length, color: 'text-[#16a34a]', bg: 'bg-green-50' },
     { label: 'Devolvidos', value: items.filter(i => i.status === 'devolvido').length, color: 'text-[#2563eb]', bg: 'bg-blue-50' },
   ]
 
@@ -68,7 +68,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-[#2563eb] flex items-center justify-center shadow-sm shadow-blue-500/20">
+              <div className="w-9 h-9 rounded-xl bg-[#16a34a] flex items-center justify-center shadow-sm shadow-green-500/20">
                 <Package className="w-5 h-5 text-white" strokeWidth={2.5} />
               </div>
               <div className="hidden sm:block">
@@ -81,7 +81,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2">
               <Link
                 href="/reportar"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#2563eb] text-white text-sm font-semibold shadow-sm shadow-blue-500/25 hover:bg-[#1d4ed8] hover:shadow-md hover:shadow-blue-500/30 active:scale-[0.98] transition-all duration-200"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#16a34a] text-white text-sm font-semibold shadow-sm shadow-green-500/25 hover:bg-[#15803d] hover:shadow-md hover:shadow-green-500/30 active:scale-[0.98] transition-all duration-200"
               >
                 <Plus className="w-4 h-4" strokeWidth={2.5} />
                 <span className="hidden sm:inline">Reportar</span>
@@ -103,7 +103,7 @@ export default function HomePage() {
         {/* Hero Section */}
         <div className="text-center mb-10 animate-fade-in-up">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight mb-2">
-            Encontre seus <span className="text-[#2563eb]">pertences</span>
+            Encontre seus <span className="text-[#16a34a]">pertences</span>
           </h2>
           <p className="text-slate-500 text-base max-w-md mx-auto">
             Ajude a recuperar o que foi perdido na escola
@@ -132,7 +132,7 @@ export default function HomePage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por título, descrição ou local..."
-              className="w-full pl-12 pr-12 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#2563eb] focus:ring-4 focus:ring-blue-50 focus:outline-none transition-all duration-200"
+              className="w-full pl-12 pr-12 py-3.5 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
             />
             {search && (
               <button
