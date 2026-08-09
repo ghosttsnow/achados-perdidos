@@ -22,15 +22,13 @@ export default function CategoryFilter({ selected, onChange }: CategoryFilterPro
           <button
             key={cat.value}
             onClick={() => onChange(cat.value)}
-            className={`group inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 ease-out ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ease-out ${
               isActive
-                ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-lg shadow-green-500/25 scale-105'
-                : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-green-300 hover:bg-green-50 hover:text-[#16a34a] hover:shadow-md hover:scale-[1.02]'
+                ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-md shadow-green-500/20'
+                : 'bg-white text-slate-600 border border-slate-200 hover:border-green-200 hover:bg-green-50 hover:text-[#16a34a]'
             }`}
           >
-            <span className={`text-lg transition-all duration-300 ease-out ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
-              {cat.emoji}
-            </span>
+            <span className="text-base">{cat.emoji}</span>
             <span>{cat.label}</span>
           </button>
         )
