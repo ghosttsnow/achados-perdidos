@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Mail, Lock, User, GraduationCap, ArrowRight, CheckCircle, Sparkles } from 'lucide-react'
+import { X, Mail, Lock, User, GraduationCap, ArrowRight, CheckCircle, Sparkles, Eye, EyeOff } from 'lucide-react'
 import { createUser, findUserByEmail, saveSession, getSession, StoredUser } from '@/lib/storage'
 
 interface AuthPopupProps {
@@ -201,7 +201,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
                     >
-                      {showPassword ? <Lock className="w-4 h-4" strokeWidth={2} /> : <Lock className="w-4 h-4" strokeWidth={2} />}
+                      {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={2} /> : <Eye className="w-4 h-4" strokeWidth={2} />}
                     </button>
                   </div>
                 </div>
@@ -309,7 +309,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
                     >
-                      {showPassword ? <Lock className="w-4 h-4" strokeWidth={2} /> : <Lock className="w-4 h-4" strokeWidth={2} />}
+                      {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={2} /> : <Eye className="w-4 h-4" strokeWidth={2} />}
                     </button>
                   </div>
                 </div>
