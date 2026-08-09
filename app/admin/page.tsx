@@ -9,10 +9,10 @@ import { initEmailJS, sendItemFoundEmail } from '@/lib/notify'
 import Link from 'next/link'
 
 const categories = [
-  { value: 'uniforme', label: 'Uniforme', icon: Shirt },
-  { value: 'eletronico', label: 'Eletrônico', icon: Laptop },
-  { value: 'material', label: 'Material', icon: BookOpen },
-  { value: 'outro', label: 'Outro', icon: Package },
+  { value: 'uniforme', label: 'Uniforme', icon: Shirt, emoji: '👕' },
+  { value: 'eletronico', label: 'Eletrônico', icon: Laptop, emoji: '📱' },
+  { value: 'material', label: 'Material', icon: BookOpen, emoji: '📚' },
+  { value: 'outro', label: 'Outro', icon: Package, emoji: '📦' },
 ]
 
 const statusLabels: Record<string, string> = {
@@ -54,6 +54,7 @@ export default function AdminPage() {
   const [formSuccess, setFormSuccess] = useState(false)
   const [toasts, setToasts] = useState<Toast[]>([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [focusedField, setFocusedField] = useState<string | null>(null)
   const router = useRouter()
 
   const addToast = useCallback((message: string, type: 'success' | 'info' = 'success') => {
@@ -184,26 +185,26 @@ export default function AdminPage() {
   }
 
   const statCards = [
-    { label: 'Total', value: stats.total, color: 'text-slate-700', bg: 'bg-slate-50', icon: ClipboardCheck },
-    { label: 'Perdidos', value: stats.perdidos, color: 'text-orange-500', bg: 'bg-orange-50', icon: AlertTriangle },
-    { label: 'Encontrados', value: stats.encontrados, color: 'text-[#16a34a]', bg: 'bg-green-50', icon: Search },
-    { label: 'Devolvidos', value: stats.devolvidos, color: 'text-[#2563eb]', bg: 'bg-blue-50', icon: TrendingUp },
+    { label: 'Total', value: stats.total, color: 'text-slate-700', bg: 'bg-gradient-to-br from-slate-50 to-slate-100', border: 'border-slate-200', icon: ClipboardCheck },
+    { label: 'Perdidos', value: stats.perdidos, color: 'text-orange-500', bg: 'bg-gradient-to-br from-orange-50 to-orange-100', border: 'border-orange-200', icon: AlertTriangle },
+    { label: 'Encontrados', value: stats.encontrados, color: 'text-[#16a34a]', bg: 'bg-gradient-to-br from-green-50 to-green-100', border: 'border-green-200', icon: Search },
+    { label: 'Devolvidos', value: stats.devolvidos, color: 'text-[#2563eb]', bg: 'bg-gradient-to-br from-blue-50 to-blue-100', border: 'border-blue-200', icon: TrendingUp },
   ]
 
   const statusFilters = ['todos', 'perdido', 'encontrado', 'devolvido'] as const
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+      <header className="sticky top-0 z-50 glass border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Link
                 href="/"
-                className="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 transition-all duration-200"
+                className="group w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 hover:shadow-md transition-all duration-300 hover:scale-105"
               >
-                <ArrowLeft className="w-4 h-4" strokeWidth={2} />
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" strokeWidth={2} />
               </Link>
               <div>
                 <h1 className="text-base font-bold text-slate-900 tracking-tight">Painel Admin</h1>
@@ -212,62 +213,65 @@ export default function AdminPage() {
             </div>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+              className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 hover:shadow-md transition-all duration-300 hover:scale-105"
             >
-              <LogOut className="w-4 h-4" strokeWidth={2} />
+              <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" strokeWidth={2} />
               <span className="hidden sm:inline">Sair</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 animate-fade-in-up">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 animate-fade-in-up">
           {statCards.map((stat) => {
             const Icon = stat.icon
             return (
               <div
                 key={stat.label}
-                className={`${stat.bg} rounded-xl p-4 transition-all duration-300 hover:scale-[1.03] cursor-default`}
+                className={`${stat.bg} ${stat.border} border rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:scale-[1.03] hover:shadow-lg cursor-default group`}
               >
-                <div className="flex items-center justify-between mb-2">
-                  <Icon className={`w-5 h-5 ${stat.color}`} strokeWidth={2} />
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                    <Icon className={`w-5 h-5 ${stat.color}`} strokeWidth={2} />
+                  </div>
                 </div>
-                <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                <p className="text-xs font-medium text-slate-500 mt-0.5">{stat.label}</p>
+                <p className={`text-3xl sm:text-4xl font-bold ${stat.color}`}>{stat.value}</p>
+                <p className="text-xs sm:text-sm font-medium text-slate-500 mt-1 group-hover:text-slate-700 transition-colors duration-200">{stat.label}</p>
               </div>
             )
           })}
         </div>
 
         {/* Actions Bar */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <div className="flex flex-col sm:flex-row gap-3 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <button
             onClick={() => setShowForm(!showForm)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 active:scale-[0.98] ${
+            className={`group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] ${
               showForm
-                ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
-                : 'bg-[#16a34a] text-white shadow-sm shadow-green-500/25 hover:bg-[#15803d] hover:shadow-md'
+                ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 hover:shadow-md'
+                : 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/35 hover:scale-[1.02]'
             }`}
           >
-            <Plus className={`w-4 h-4 transition-transform duration-200 ${showForm ? 'rotate-45' : ''}`} strokeWidth={2.5} />
+            <Plus className={`w-4 h-4 transition-transform duration-300 ${showForm ? 'rotate-45' : 'group-hover:rotate-90'}`} strokeWidth={2.5} />
             {showForm ? 'Fechar' : 'Item Encontrado'}
+            {!showForm && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />}
           </button>
 
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar itens..."
-              className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+              className="w-full pl-11 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:shadow-md focus:outline-none transition-all duration-300"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 hover:scale-110 active:scale-95 transition-all duration-200"
               >
                 <X className="w-3 h-3" strokeWidth={2.5} />
               </button>
@@ -276,54 +280,70 @@ export default function AdminPage() {
         </div>
 
         {/* Form */}
-        <div className={`overflow-hidden transition-all duration-400 ease-out ${showForm ? 'max-h-[1200px] opacity-100 mb-6' : 'max-h-0 opacity-0 mb-0'}`}>
-          <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm animate-fade-in-up">
+        <div className={`overflow-hidden transition-all duration-500 ease-out ${showForm ? 'max-h-[1200px] opacity-100 mb-8' : 'max-h-0 opacity-0 mb-0'}`}>
+          <div className="bg-white rounded-2xl border border-slate-100 p-6 sm:p-8 shadow-sm animate-fade-in-up">
             {formSuccess ? (
               <div className="text-center py-12">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-4 animate-bounce-in">
-                  <CheckCircle className="w-8 h-8 text-emerald-500" strokeWidth={1.5} />
+                <div className="relative w-20 h-20 mx-auto mb-6">
+                  <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] animate-pulse-glow" />
+                  <div className="relative w-full h-full rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] flex items-center justify-center shadow-xl shadow-green-500/30">
+                    <CheckCircle className="w-10 h-10 text-white" strokeWidth={1.5} />
+                  </div>
                 </div>
-                <p className="text-lg font-semibold text-slate-900">Item reportado!</p>
-                <p className="text-sm text-slate-500 mt-1">O item já aparece na galeria.</p>
+                <p className="text-xl font-bold text-slate-900">Item reportado!</p>
+                <p className="text-sm text-slate-500 mt-2">O item já aparece na galeria.</p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                    <Package className="w-4 h-4 text-[#2563eb]" strokeWidth={2} />
+                  <h2 className="text-lg font-bold text-slate-900 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#16a34a] to-[#15803d] flex items-center justify-center shadow-lg shadow-green-500/25">
+                      <Package className="w-5 h-5 text-white" strokeWidth={2} />
+                    </div>
                     Novo Item Encontrado
                   </h2>
-                  <p className="text-xs text-slate-500 mt-0.5">Preencha os dados do item encontrado.</p>
+                  <p className="text-sm text-slate-500 mt-2 ml-13">Preencha os dados do item encontrado.</p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-slate-700">Nome do item *</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                        <Package className="w-4 h-4" strokeWidth={2} />
+                      </div>
+                      Nome do item *
+                    </label>
                     <input
                       type="text" required
                       value={formData.title}
                       onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onFocus={() => setFocusedField('title')}
+                      onBlur={() => setFocusedField(null)}
                       placeholder="Ex: Kimono preto, Caderneta..."
                       className="input-premium"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-slate-700">Categoria *</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                        <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
+                      </div>
+                      Categoria *
+                    </label>
                     <div className="flex gap-2">
                       {categories.map((cat) => {
-                        const Icon = cat.icon
                         const isSelected = formData.category === cat.value
                         return (
                           <button
                             key={cat.value} type="button"
                             onClick={() => setFormData({ ...formData, category: cat.value })}
-                            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 transition-all duration-200 text-xs font-medium ${
+                            className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl border-2 transition-all duration-300 text-xs font-medium ${
                               isSelected
-                                ? 'border-[#2563eb] bg-blue-50 text-[#2563eb]'
-                                : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
+                                ? 'border-[#16a34a] bg-green-50 text-[#16a34a] shadow-md shadow-green-500/10 scale-[1.02]'
+                                : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm'
                             }`}
                           >
-                            <Icon className="w-3.5 h-3.5" strokeWidth={2} />
+                            <span className="text-base">{cat.emoji}</span>
                             <span className="hidden sm:inline">{cat.label}</span>
                           </button>
                         )
@@ -332,67 +352,100 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Descrição *</label>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
+                    </div>
+                    Descrição *
+                  </label>
                   <textarea
                     required rows={2}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onFocus={() => setFocusedField('description')}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="Descreva: cor, marca, detalhes..."
                     className="input-premium resize-none"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-slate-700">Local *</label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                        <Search className="w-4 h-4" strokeWidth={2} />
+                      </div>
+                      Local *
+                    </label>
                     <input
                       type="text" required
                       value={formData.location}
                       onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      onFocus={() => setFocusedField('location')}
+                      onBlur={() => setFocusedField(null)}
                       placeholder="Ex: Pátio, Sala 201..."
                       className="input-premium"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-slate-700">Quem encontrou</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'reported_by' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                        <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
+                      </div>
+                      Quem encontrou
+                    </label>
                     <input
                       type="text"
                       value={formData.reported_by}
                       onChange={(e) => setFormData({ ...formData, reported_by: e.target.value })}
+                      onFocus={() => setFocusedField('reported_by')}
+                      onBlur={() => setFocusedField(null)}
                       placeholder="Seu nome"
                       className="input-premium"
                     />
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-slate-700">Contato</label>
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                        <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
+                      </div>
+                      Contato
+                    </label>
                     <input
                       type="text"
                       value={formData.contact}
                       onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                      onFocus={() => setFocusedField('contact')}
+                      onBlur={() => setFocusedField(null)}
                       placeholder="Tel ou sala"
                       className="input-premium"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-sm font-semibold text-slate-700">Foto</label>
+                <div className="space-y-2">
+                  <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <Upload className="w-4 h-4" strokeWidth={2} />
+                    </div>
+                    Foto
+                  </label>
                   <div className="flex items-center gap-4">
-                    <label className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-slate-200 bg-white hover:border-[#2563eb] hover:bg-blue-50/50 cursor-pointer transition-all duration-200 group">
-                      <Upload className="w-4 h-4 text-slate-400 group-hover:text-[#2563eb] transition-colors" strokeWidth={2} />
-                      <span className="text-sm text-slate-500 group-hover:text-[#2563eb] transition-colors font-medium">
+                    <label className="group inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-dashed border-slate-200 bg-white hover:border-[#16a34a] hover:bg-green-50/50 cursor-pointer transition-all duration-300">
+                      <Upload className="w-4 h-4 text-slate-400 group-hover:text-[#16a34a] transition-colors duration-300" strokeWidth={2} />
+                      <span className="text-sm text-slate-500 group-hover:text-[#16a34a] transition-colors duration-300 font-medium">
                         {photoPreview ? 'Trocar foto' : 'Enviar foto'}
                       </span>
                       <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                     </label>
                     {photoPreview && (
-                      <div className="relative group animate-scale-in">
-                        <img src={photoPreview} alt="Preview" className="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-100" />
+                      <div className="relative group animate-bounce-in">
+                        <img src={photoPreview} alt="Preview" className="w-14 h-14 rounded-xl object-cover ring-4 ring-slate-100 group-hover:ring-green-100 transition-all duration-300" />
                         <button
                           type="button"
                           onClick={() => setPhotoPreview(null)}
-                          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                          className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200 shadow-lg"
                         >
                           <X className="w-3 h-3" strokeWidth={2.5} />
                         </button>
@@ -404,7 +457,7 @@ export default function AdminPage() {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="btn-primary"
+                  className="group relative w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-semibold text-sm shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/35 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-lg disabled:hover:scale-100 transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden"
                 >
                   {submitting ? (
                     <>
@@ -417,6 +470,7 @@ export default function AdminPage() {
                       Reportar Item Encontrado
                     </>
                   )}
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </button>
               </form>
             )}
@@ -424,15 +478,15 @@ export default function AdminPage() {
         </div>
 
         {/* Status Filters */}
-        <div className="flex flex-wrap gap-2 mb-6 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+        <div className="flex flex-wrap gap-2 mb-8 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
           {statusFilters.map((status) => (
             <button
               key={status}
               onClick={() => setFilter(status)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
                 filter === status
-                  ? 'bg-[#16a34a] text-white shadow-sm shadow-green-500/25'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                  ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-lg shadow-green-500/25 scale-[1.02]'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.01]'
               }`}
             >
               {statusLabels[status]} ({stats[status as keyof typeof stats]})
@@ -442,12 +496,12 @@ export default function AdminPage() {
 
         {/* Items List */}
         {loading ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white rounded-xl border border-slate-100 p-5 animate-pulse">
+              <div key={i} className="bg-white rounded-2xl border border-slate-100 p-5 animate-pulse">
                 <div className="flex gap-4">
-                  <div className="w-14 h-14 bg-slate-100 rounded-xl" />
-                  <div className="flex-1 space-y-2">
+                  <div className="w-16 h-16 bg-gradient-to-r from-slate-100 via-slate-50 to-slate-100 rounded-xl animate-shimmer" />
+                  <div className="flex-1 space-y-3">
                     <div className="h-4 bg-slate-100 rounded w-1/3" />
                     <div className="h-3 bg-slate-100 rounded w-1/2" />
                   </div>
@@ -456,58 +510,65 @@ export default function AdminPage() {
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="text-center py-16 animate-fade-in">
-            <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-4">
-              <Package className="w-7 h-7 text-slate-300" strokeWidth={1.5} />
+          <div className="text-center py-16 animate-bounce-in">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center mx-auto mb-6 border border-slate-200">
+              <Package className="w-8 h-8 text-slate-300" strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-1">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">
               {searchQuery ? 'Nenhum resultado' : 'Nenhum item'}
             </h3>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 max-w-sm mx-auto">
               {searchQuery ? `Nenhum item para "${searchQuery}"` : 'Nenhum item com este filtro.'}
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {filteredItems.map((item, idx) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl border border-slate-100 p-4 sm:p-5 hover:shadow-md hover:border-slate-200 transition-all duration-300 animate-fade-in-up group"
+                className="group bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 hover:shadow-xl hover:shadow-slate-200/60 hover:border-slate-200 hover:-translate-y-0.5 transition-all duration-500 animate-fade-in-up"
                 style={{ animationDelay: `${idx * 0.04}s` }}
               >
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Photo */}
-                  <div className="w-full sm:w-16 h-32 sm:h-16 bg-slate-50 rounded-xl overflow-hidden flex-shrink-0">
+                  <div className="w-full sm:w-20 h-32 sm:h-20 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl overflow-hidden flex-shrink-0">
                     {item.photo_url ? (
-                      <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover" />
+                      <img src={item.photo_url} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-slate-300">
-                        <Package className="w-6 h-6" strokeWidth={1.5} />
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Package className="w-8 h-8 text-slate-300 group-hover:scale-110 transition-transform duration-300" strokeWidth={1.5} />
                       </div>
                     )}
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-semibold text-slate-900 group-hover:text-[#16a34a] transition-colors">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="font-bold text-slate-900 group-hover:text-[#16a34a] transition-colors duration-300 text-base">
                         {item.title}
                       </h3>
                       <StatusBadge status={item.status} />
                     </div>
-                    <p className="text-sm text-slate-500 line-clamp-1 mb-2">{item.description}</p>
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-400">
-                      <span>{item.reported_by}</span>
-                      <span>·</span>
-                      <span>{item.location}</span>
+                    <p className="text-sm text-slate-500 line-clamp-1 mb-3">{item.description}</p>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-400">
+                      <span className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                        {item.reported_by}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                        {item.location}
+                      </span>
                       {item.contact && (
-                        <>
-                          <span>·</span>
-                          <span>{item.contact}</span>
-                        </>
+                        <span className="flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                          {item.contact}
+                        </span>
                       )}
-                      <span>·</span>
-                      <span>{new Date(item.created_at).toLocaleDateString('pt-BR')}</span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
+                        {new Date(item.created_at).toLocaleDateString('pt-BR')}
+                      </span>
                     </div>
                   </div>
 
@@ -516,18 +577,18 @@ export default function AdminPage() {
                     {item.status === 'perdido' && (
                       <button
                         onClick={() => handleUpdateStatus(item.id, 'encontrado')}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-50 text-emerald-600 text-sm font-medium hover:bg-emerald-100 active:scale-[0.98] transition-all duration-200"
+                        className="group/btn inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
                       >
-                        <CheckCircle className="w-3.5 h-3.5" strokeWidth={2} />
+                        <CheckCircle className="w-3.5 h-3.5 group-hover/btn:rotate-12 transition-transform duration-200" strokeWidth={2} />
                         Encontrei
                       </button>
                     )}
                     {item.status === 'encontrado' && (
                       <button
                         onClick={() => handleUpdateStatus(item.id, 'devolvido')}
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 text-[#2563eb] text-sm font-medium hover:bg-blue-100 active:scale-[0.98] transition-all duration-200"
+                        className="group/btn inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm font-semibold shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
                       >
-                        <CheckCircle className="w-3.5 h-3.5" strokeWidth={2} />
+                        <CheckCircle className="w-3.5 h-3.5 group-hover/btn:rotate-12 transition-transform duration-200" strokeWidth={2} />
                         Devolvido
                       </button>
                     )}
@@ -540,25 +601,29 @@ export default function AdminPage() {
       </main>
 
       {/* Toasts */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-center gap-3 px-5 py-3 rounded-xl shadow-lg text-sm font-medium animate-slide-in-right ${
-              toast.type === 'success' ? 'bg-slate-900 text-white' : 'bg-[#2563eb] text-white'
+            className={`flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl text-sm font-medium animate-slide-in-right backdrop-blur-md ${
+              toast.type === 'success' ? 'bg-slate-900/90 text-white' : 'bg-[#2563eb]/90 text-white'
             }`}
           >
             {toast.type === 'success' ? (
-              <CheckCircle className="w-4 h-4" strokeWidth={2} />
+              <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                <CheckCircle className="w-4 h-4" strokeWidth={2} />
+              </div>
             ) : (
-              <Package className="w-4 h-4" strokeWidth={2} />
+              <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                <Package className="w-4 h-4" strokeWidth={2} />
+              </div>
             )}
-            {toast.message}
+            <span className="flex-1">{toast.message}</span>
             <button
               onClick={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
-              className="ml-1 opacity-60 hover:opacity-100 transition-opacity"
+              className="ml-1 opacity-60 hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200"
             >
-              <X className="w-3.5 h-3.5" strokeWidth={2.5} />
+              <X className="w-4 h-4" strokeWidth={2.5} />
             </button>
           </div>
         ))}

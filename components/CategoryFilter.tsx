@@ -1,13 +1,11 @@
 'use client'
 
-import { Shirt, Laptop, BookOpen, Package, Grid3X3 } from 'lucide-react'
-
 const categories = [
-  { value: 'todos', label: 'Todos', icon: Grid3X3 },
-  { value: 'uniforme', label: 'Uniforme', icon: Shirt },
-  { value: 'eletronico', label: 'Eletrônico', icon: Laptop },
-  { value: 'material', label: 'Material', icon: BookOpen },
-  { value: 'outro', label: 'Outro', icon: Package },
+  { value: 'todos', label: 'Todos', emoji: '🎯' },
+  { value: 'uniforme', label: 'Uniforme', emoji: '👕' },
+  { value: 'eletronico', label: 'Eletrônico', emoji: '📱' },
+  { value: 'material', label: 'Material', emoji: '📚' },
+  { value: 'outro', label: 'Outro', emoji: '📦' },
 ]
 
 interface CategoryFilterProps {
@@ -17,21 +15,22 @@ interface CategoryFilterProps {
 
 export default function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
   return (
-    <div className="flex flex-wrap justify-center gap-2">
+    <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
       {categories.map((cat) => {
-        const Icon = cat.icon
         const isActive = selected === cat.value
         return (
           <button
             key={cat.value}
             onClick={() => onChange(cat.value)}
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
               isActive
-                ? 'bg-[#16a34a] text-white shadow-sm shadow-green-500/25'
-                : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-lg shadow-green-500/25 scale-[1.02]'
+                : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:scale-[1.01]'
             }`}
           >
-            <Icon className="w-4 h-4" strokeWidth={2} />
+            <span className={`text-base transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+              {cat.emoji}
+            </span>
             {cat.label}
           </button>
         )
