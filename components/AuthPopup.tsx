@@ -84,12 +84,12 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in"
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in duration-300"
         onClick={handleClose}
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-md animate-bounce-in">
+      <div className="relative w-full max-w-md animate-modal-in">
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/20 border border-white/50 overflow-hidden">
           {/* Close button */}
           <button
@@ -101,7 +101,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
 
           {/* Success State */}
           {step === 'success' && (
-            <div className="p-8 text-center">
+            <div className="p-8 text-center animate-scale-in">
               <div className="relative w-20 h-20 mx-auto mb-6">
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] animate-pulse-glow" />
                 <div className="relative w-full h-full rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] flex items-center justify-center shadow-xl shadow-green-500/30">
@@ -151,7 +151,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
 
               <button
                 onClick={handleClose}
-                className="w-full mt-4 py-2 text-sm text-slate-400 hover:text-slate-600 transition-colors"
+                className="w-full mt-4 py-2 text-sm text-slate-400 hover:text-slate-600 transition-colors duration-200"
               >
                 Pular por agora
               </button>
@@ -180,7 +180,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="seu@email.com"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-300"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -194,12 +194,12 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Sua senha"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-300"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
                     >
                       {showPassword ? <Lock className="w-4 h-4" strokeWidth={2} /> : <Lock className="w-4 h-4" strokeWidth={2} />}
                     </button>
@@ -224,14 +224,14 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
               <div className="flex items-center gap-3 mt-6">
                 <button
                   onClick={() => { setStep('ask'); setError(''); setEmail(''); setPassword('') }}
-                  className="text-sm text-slate-500 hover:text-[#16a34a] transition-colors"
+                  className="text-sm text-slate-500 hover:text-[#16a34a] transition-colors duration-200"
                 >
                   ← Voltar
                 </button>
                 <span className="text-slate-300">·</span>
                 <button
                   onClick={() => { setStep('register'); setError('') }}
-                  className="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors"
+                  className="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors duration-200"
                 >
                   Criar conta
                 </button>
@@ -261,7 +261,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Seu nome"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-300"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -275,7 +275,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="seu@email.com"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-300"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -288,7 +288,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       value={className}
                       onChange={(e) => setClassName(e.target.value)}
                       placeholder="Ex: 3° ano A"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-300"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
@@ -302,12 +302,12 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Mínimo 4 caracteres"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-300"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
                     >
                       {showPassword ? <Lock className="w-4 h-4" strokeWidth={2} /> : <Lock className="w-4 h-4" strokeWidth={2} />}
                     </button>
@@ -332,14 +332,14 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
               <div className="flex items-center gap-3 mt-6">
                 <button
                   onClick={() => { setStep('ask'); setError(''); setEmail(''); setPassword(''); setName(''); setClassName('') }}
-                  className="text-sm text-slate-500 hover:text-[#16a34a] transition-colors"
+                  className="text-sm text-slate-500 hover:text-[#16a34a] transition-colors duration-200"
                 >
                   ← Voltar
                 </button>
                 <span className="text-slate-300">·</span>
                 <button
                   onClick={() => { setStep('login'); setError('') }}
-                  className="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors"
+                  className="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors duration-200"
                 >
                   Já tenho conta
                 </button>

@@ -202,7 +202,7 @@ export default function AdminPage() {
             <div className="flex items-center gap-4">
               <Link
                 href="/"
-                className="group w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 hover:shadow-md transition-all duration-300 hover:scale-105"
+                className="group w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 hover:shadow-md transition-all duration-200 hover:scale-105"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" strokeWidth={2} />
               </Link>
@@ -213,7 +213,7 @@ export default function AdminPage() {
             </div>
             <button
               onClick={handleLogout}
-              className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 hover:shadow-md transition-all duration-300 hover:scale-105"
+              className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 hover:shadow-md transition-all duration-200 hover:scale-105"
             >
               <LogOut className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" strokeWidth={2} />
               <span className="hidden sm:inline">Sair</span>
@@ -224,13 +224,14 @@ export default function AdminPage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8 animate-fade-in-up">
-          {statCards.map((stat) => {
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          {statCards.map((stat, idx) => {
             const Icon = stat.icon
             return (
               <div
                 key={stat.label}
-                className={`${stat.bg} ${stat.border} border rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:scale-[1.03] hover:shadow-lg cursor-default group`}
+                className={`${stat.bg} ${stat.border} border rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:scale-[1.03] hover:shadow-lg cursor-default group animate-fade-in-up`}
+                style={{ animationDelay: `${idx * 75}ms` }}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className={`w-10 h-10 rounded-xl ${stat.bg} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
@@ -245,7 +246,7 @@ export default function AdminPage() {
         </div>
 
         {/* Actions Bar */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <button
             onClick={() => setShowForm(!showForm)}
             className={`group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 active:scale-[0.98] ${
@@ -256,7 +257,7 @@ export default function AdminPage() {
           >
             <Plus className={`w-4 h-4 transition-transform duration-300 ${showForm ? 'rotate-45' : 'group-hover:rotate-90'}`} strokeWidth={2.5} />
             {showForm ? 'Fechar' : 'Item Encontrado'}
-            {!showForm && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />}
+            {!showForm && <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />}
           </button>
 
           <div className="relative flex-1 max-w-sm">
@@ -266,12 +267,12 @@ export default function AdminPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Buscar itens..."
-              className="w-full pl-11 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:shadow-md focus:outline-none transition-all duration-300"
+              className="w-full pl-11 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 hover:scale-110 active:scale-95 transition-all duration-200"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 hover:scale-110 active:scale-95 transition-all duration-150"
               >
                 <X className="w-3 h-3" strokeWidth={2.5} />
               </button>
@@ -283,7 +284,7 @@ export default function AdminPage() {
         <div className={`overflow-hidden transition-all duration-500 ease-out ${showForm ? 'max-h-[1200px] opacity-100 mb-8' : 'max-h-0 opacity-0 mb-0'}`}>
           <div className="bg-white rounded-2xl border border-slate-100 p-6 sm:p-8 shadow-sm animate-fade-in-up">
             {formSuccess ? (
-              <div className="text-center py-12">
+              <div className="text-center py-12 animate-scale-in">
                 <div className="relative w-20 h-20 mx-auto mb-6">
                   <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] animate-pulse-glow" />
                   <div className="relative w-full h-full rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] flex items-center justify-center shadow-xl shadow-green-500/30">
@@ -308,7 +309,7 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                         <Package className="w-4 h-4" strokeWidth={2} />
                       </div>
                       Nome do item *
@@ -325,7 +326,7 @@ export default function AdminPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                         <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
                       </div>
                       Categoria *
@@ -340,7 +341,7 @@ export default function AdminPage() {
                             className={`flex items-center gap-1.5 px-3 py-2.5 rounded-xl border-2 transition-all duration-300 text-xs font-medium ${
                               isSelected
                                 ? 'border-[#16a34a] bg-green-50 text-[#16a34a] shadow-md shadow-green-500/10 scale-[1.02]'
-                                : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm'
+                                : 'border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50 hover:shadow-sm active:scale-[0.98]'
                             }`}
                           >
                             <span className="text-base">{cat.emoji}</span>
@@ -354,7 +355,7 @@ export default function AdminPage() {
 
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                       <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
                     </div>
                     Descrição *
@@ -373,7 +374,7 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                         <Search className="w-4 h-4" strokeWidth={2} />
                       </div>
                       Local *
@@ -390,7 +391,7 @@ export default function AdminPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'reported_by' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'reported_by' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                         <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
                       </div>
                       Quem encontrou
@@ -407,7 +408,7 @@ export default function AdminPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                         <ClipboardCheck className="w-4 h-4" strokeWidth={2} />
                       </div>
                       Contato
@@ -426,7 +427,7 @@ export default function AdminPage() {
 
                 <div className="space-y-2">
                   <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                       <Upload className="w-4 h-4" strokeWidth={2} />
                     </div>
                     Foto
@@ -440,7 +441,7 @@ export default function AdminPage() {
                       <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                     </label>
                     {photoPreview && (
-                      <div className="relative group animate-bounce-in">
+                      <div className="relative group animate-scale-in">
                         <img src={photoPreview} alt="Preview" className="w-14 h-14 rounded-xl object-cover ring-4 ring-slate-100 group-hover:ring-green-100 transition-all duration-300" />
                         <button
                           type="button"
@@ -470,7 +471,7 @@ export default function AdminPage() {
                       Reportar Item Encontrado
                     </>
                   )}
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                 </button>
               </form>
             )}
@@ -478,7 +479,7 @@ export default function AdminPage() {
         </div>
 
         {/* Status Filters */}
-        <div className="flex flex-wrap gap-2 mb-8 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+        <div className="flex flex-wrap gap-2 mb-8">
           {statusFilters.map((status) => (
             <button
               key={status}
@@ -486,7 +487,7 @@ export default function AdminPage() {
               className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
                 filter === status
                   ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-lg shadow-green-500/25 scale-[1.02]'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.01]'
+                  : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.01] active:scale-[0.98]'
               }`}
             >
               {statusLabels[status]} ({stats[status as keyof typeof stats]})
@@ -510,7 +511,7 @@ export default function AdminPage() {
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
-          <div className="text-center py-16 animate-bounce-in">
+          <div className="text-center py-16 animate-fade-in">
             <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center mx-auto mb-6 border border-slate-200">
               <Package className="w-8 h-8 text-slate-300" strokeWidth={1.5} />
             </div>
@@ -526,8 +527,8 @@ export default function AdminPage() {
             {filteredItems.map((item, idx) => (
               <div
                 key={item.id}
-                className="group bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 hover:shadow-xl hover:shadow-slate-200/60 hover:border-slate-200 hover:-translate-y-0.5 transition-all duration-500 animate-fade-in-up"
-                style={{ animationDelay: `${idx * 0.04}s` }}
+                className="group bg-white rounded-2xl border border-slate-100 p-4 sm:p-5 hover:shadow-xl hover:shadow-slate-200/60 hover:border-slate-200 hover:-translate-y-0.5 transition-all duration-300 animate-fade-in-up"
+                style={{ animationDelay: `${Math.min(idx * 50, 300)}ms` }}
               >
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Photo */}
@@ -544,7 +545,7 @@ export default function AdminPage() {
                   {/* Info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-2">
-                      <h3 className="font-bold text-slate-900 group-hover:text-[#16a34a] transition-colors duration-300 text-base">
+                      <h3 className="font-bold text-slate-900 group-hover:text-[#16a34a] transition-colors duration-200 text-base">
                         {item.title}
                       </h3>
                       <StatusBadge status={item.status} />
@@ -605,7 +606,7 @@ export default function AdminPage() {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl text-sm font-medium animate-slide-in-right backdrop-blur-md ${
+            className={`flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl text-sm font-medium animate-toast-in backdrop-blur-md ${
               toast.type === 'success' ? 'bg-slate-900/90 text-white' : 'bg-[#2563eb]/90 text-white'
             }`}
           >
@@ -621,7 +622,7 @@ export default function AdminPage() {
             <span className="flex-1">{toast.message}</span>
             <button
               onClick={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
-              className="ml-1 opacity-60 hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200"
+              className="ml-1 opacity-60 hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-150"
             >
               <X className="w-4 h-4" strokeWidth={2.5} />
             </button>

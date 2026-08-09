@@ -58,7 +58,7 @@ export default function ReportarPage() {
   if (success) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30 flex items-center justify-center px-4">
-        <div className="text-center animate-bounce-in max-w-sm">
+        <div className="text-center animate-scale-in max-w-sm">
           <div className="relative w-24 h-24 mx-auto mb-6">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] animate-pulse-glow" />
             <div className="relative w-full h-full rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] flex items-center justify-center shadow-xl shadow-green-500/30">
@@ -89,7 +89,7 @@ export default function ReportarPage() {
           <div className="flex items-center gap-4 h-16">
             <Link
               href="/"
-              className="group w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 hover:shadow-md transition-all duration-300 hover:scale-105"
+              className="group w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 hover:shadow-md transition-all duration-200 hover:scale-105"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" strokeWidth={2} />
             </Link>
@@ -107,7 +107,7 @@ export default function ReportarPage() {
           {/* Name */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.05s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'name' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'name' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <User className="w-4 h-4" strokeWidth={2} />
               </div>
               Seu nome
@@ -127,7 +127,7 @@ export default function ReportarPage() {
           {/* Title */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <FileText className="w-4 h-4" strokeWidth={2} />
               </div>
               Título do item
@@ -147,7 +147,7 @@ export default function ReportarPage() {
           {/* Description */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <FileText className="w-4 h-4" strokeWidth={2} />
               </div>
               Descrição
@@ -167,7 +167,7 @@ export default function ReportarPage() {
           {/* Category */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <Tag className="w-4 h-4" strokeWidth={2} />
               </div>
               Categoria
@@ -181,13 +181,13 @@ export default function ReportarPage() {
                   className={`group relative overflow-hidden px-4 py-4 rounded-2xl text-sm font-medium border-2 transition-all duration-300 ${
                     category === cat.value
                       ? 'border-[#16a34a] bg-gradient-to-br from-green-50 to-green-100/50 text-[#16a34a] shadow-lg shadow-green-500/10 scale-[1.02]'
-                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.01]'
+                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.01] active:scale-[0.98]'
                   }`}
                 >
-                  <span className="text-xl mb-1 block">{cat.icon}</span>
+                  <span className="text-xl mb-1 block transition-transform duration-200 group-hover:scale-110">{cat.icon}</span>
                   <span>{cat.label}</span>
                   {category === cat.value && (
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                   )}
                 </button>
               ))}
@@ -197,7 +197,7 @@ export default function ReportarPage() {
           {/* Location */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <MapPin className="w-4 h-4" strokeWidth={2} />
               </div>
               Local
@@ -217,7 +217,7 @@ export default function ReportarPage() {
           {/* Contact */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <Mail className="w-4 h-4" strokeWidth={2} />
               </div>
               Email para contato
@@ -236,7 +236,7 @@ export default function ReportarPage() {
           {/* Photo */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
             <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
                 <Camera className="w-4 h-4" strokeWidth={2} />
               </div>
               Foto <span className="text-slate-400 font-normal">(opcional)</span>
@@ -251,7 +251,7 @@ export default function ReportarPage() {
                 >
                   <X className="w-4 h-4" strokeWidth={2.5} />
                 </button>
-                <div className="absolute inset-0 rounded-2xl bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+                <div className="absolute inset-0 rounded-2xl bg-black/0 group-hover:bg-black/10 transition-all duration-200" />
               </div>
             ) : (
               <button
@@ -299,7 +299,7 @@ export default function ReportarPage() {
                   Reportar item perdido
                 </>
               )}
-              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
             </button>
           </div>
         </form>
