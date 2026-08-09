@@ -132,7 +132,7 @@ export default function HomePage() {
               <img
                 src="/logo-colegio.png"
                 alt="Colégio Batista Nova Betânia"
-                className="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-200"
+                className="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-200 mix-blend-multiply dark:mix-blend-screen"
               />
               <div className="hidden sm:block">
                 <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight group-hover:text-[#16a34a] transition-colors duration-200">Achados & Perdidos</h1>
@@ -218,7 +218,7 @@ export default function HomePage() {
             <img
               src="/logo-colegio.png"
               alt="Colégio Batista Nova Betânia"
-              className="h-28 sm:h-36 w-auto mx-auto drop-shadow-sm"
+              className="h-28 sm:h-36 w-auto mx-auto drop-shadow-sm mix-blend-multiply dark:mix-blend-screen"
             />
           </div>
 
@@ -354,7 +354,7 @@ export default function HomePage() {
             <img
               src="/logo-colegio.png"
               alt="Colégio Batista Nova Betânia"
-              className="h-12 w-auto opacity-60"
+              className="h-12 w-auto opacity-60 mix-blend-multiply dark:mix-blend-screen"
             />
             <p className="text-sm text-slate-400 dark:text-slate-500">
               Colégio Batista Nova Betânia · Achados & Perdidos
