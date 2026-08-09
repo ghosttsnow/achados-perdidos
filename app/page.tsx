@@ -366,7 +366,7 @@ export default function HomePage() {
               Colégio Batista Nova Betânia · Achados & Perdidos
             </p>
             <p className="text-xs text-slate-300 dark:text-slate-600">
-              Feito por João Henrique Misael Roque
+              Feito João Henrique M. Roque
             </p>
           </div>
         </div>
