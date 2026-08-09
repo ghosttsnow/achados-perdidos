@@ -359,6 +359,9 @@ export default function HomePage() {
             <p className="text-sm text-slate-400 dark:text-slate-500">
               Colégio Batista Nova Betânia · Achados & Perdidos
             </p>
+            <p className="text-xs text-slate-300 dark:text-slate-600">
+              Feito por João Henrique Misael Roque
+            </p>
           </div>
         </div>
       </footer>
