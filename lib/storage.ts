@@ -129,3 +129,10 @@ export function markNotificationRead(id: string): boolean {
   saveCollection(KEYS.NOTIFICATIONS, list)
   return true
 }
+
+export function clearAll(): void {
+  localStorage.removeItem(KEYS.ITEMS)
+  localStorage.removeItem(KEYS.NOTIFICATIONS)
+  localStorage.removeItem(KEYS.USERS)
+  localStorage.removeItem(KEYS.SESSION)
+}

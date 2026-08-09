@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOpen, X, Search, TrendingUp, AlertTriangle, ClipboardCheck, ArrowLeft } from 'lucide-react'
-import { getItems, updateItemStatus, createNotification, createItem } from '@/lib/storage'
+import { getItems, updateItemStatus, createNotification, createItem, clearAll } from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
 import { initEmailJS, sendItemFoundEmail } from '@/lib/notify'
@@ -169,6 +169,14 @@ export default function AdminPage() {
     setTimeout(() => sessionStorage.removeItem('admin-auth'), 50)
   }
 
+  function handleClearAll() {
+    if (confirm('Tem certeza? Isso vai apagar TODOS os itens e notificações.')) {
+      clearAll()
+      setItems([])
+      addToast('Todos os itens foram apagados!', 'success')
+    }
+  }
+
   const filteredItems = searchQuery
     ? items.filter(i =>
         i.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -211,6 +219,12 @@ export default function AdminPage() {
                 <p className="text-[11px] text-slate-400 font-medium">Gerencie itens achados e perdidos</p>
               </div>
             </div>
+            <button
+              onClick={handleClearAll}
+              className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 hover:shadow-md transition-all duration-200 hover:scale-105"
+            >
+              <span className="hidden sm:inline">Limpar Tudo</span>
+            </button>
             <button
               onClick={handleLogout}
               className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-red-50 hover:text-red-600 hover:shadow-md transition-all duration-200 hover:scale-105"
