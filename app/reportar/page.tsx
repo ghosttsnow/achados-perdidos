@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { ArrowLeft, CheckCircle, Upload, X, User, FileText, MapPin, Mail, Tag, Camera, Sparkles } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Upload, X, User, FileText, MapPin, Mail, Tag, Camera, Sparkles, Sun, Moon } from 'lucide-react'
 import Link from 'next/link'
 import { createItem } from '@/lib/storage'
+import { useTheme } from '@/context/ThemeContext'
 
 const categories = [
   { value: 'uniforme', label: 'Uniforme', icon: '👕' },
@@ -24,6 +25,7 @@ export default function ReportarPage() {
   const [success, setSuccess] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { theme, toggleTheme } = useTheme()
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -57,7 +59,7 @@ export default function ReportarPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center px-4">
         <div className="text-center animate-scale-in max-w-sm">
           <div className="relative w-24 h-24 mx-auto mb-6">
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-green-400 to-[#16a34a] animate-pulse-glow" />
@@ -65,8 +67,8 @@ export default function ReportarPage() {
               <CheckCircle className="w-12 h-12 text-white" strokeWidth={1.5} />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-3 tracking-tight">Item reportado!</h1>
-          <p className="text-slate-500 text-base mb-8 leading-relaxed">
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-3 tracking-tight">Item reportado!</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-base mb-8 leading-relaxed">
             Quando alguém encontrar, você será notificado por email.
           </p>
           <Link
@@ -82,21 +84,34 @@ export default function ReportarPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-white/20">
+      <header className="sticky top-0 z-50 glass border-b border-white/20 dark:border-slate-700/50">
         <div className="max-w-2xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-4 h-16">
             <Link
               href="/"
-              className="group w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 hover:text-slate-700 hover:shadow-md transition-all duration-200 hover:scale-105"
+              className="group w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 hover:text-slate-700 dark:hover:text-white hover:shadow-md transition-all duration-200 hover:scale-105"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" strokeWidth={2} />
             </Link>
-            <div>
-              <h1 className="text-base font-bold text-slate-900 tracking-tight">Reportar item perdido</h1>
-              <p className="text-xs text-slate-400">Descreva o item para ajudar a encontrar</p>
+            <div className="flex-1">
+              <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight">Reportar item perdido</h1>
+              <p className="text-xs text-slate-400 dark:text-slate-500">Descreva o item para ajudar a encontrar</p>
             </div>
+            
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 hover:text-slate-700 dark:hover:text-white transition-all duration-200"
+              aria-label={theme === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}
+            >
+              {theme === 'light' ? (
+                <Moon className="w-4 h-4" strokeWidth={2} />
+              ) : (
+                <Sun className="w-4 h-4" strokeWidth={2} />
+              )}
+            </button>
           </div>
         </div>
       </header>
@@ -106,8 +121,8 @@ export default function ReportarPage() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.05s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'name' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'name' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <User className="w-4 h-4" strokeWidth={2} />
               </div>
               Seu nome
@@ -126,8 +141,8 @@ export default function ReportarPage() {
 
           {/* Title */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'title' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <FileText className="w-4 h-4" strokeWidth={2} />
               </div>
               Título do item
@@ -146,8 +161,8 @@ export default function ReportarPage() {
 
           {/* Description */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'description' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <FileText className="w-4 h-4" strokeWidth={2} />
               </div>
               Descrição
@@ -166,8 +181,8 @@ export default function ReportarPage() {
 
           {/* Category */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-3">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'category' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <Tag className="w-4 h-4" strokeWidth={2} />
               </div>
               Categoria
@@ -180,8 +195,8 @@ export default function ReportarPage() {
                   onClick={() => setCategory(cat.value)}
                   className={`group relative overflow-hidden px-4 py-4 rounded-2xl text-sm font-medium border-2 transition-all duration-300 ${
                     category === cat.value
-                      ? 'border-[#16a34a] bg-gradient-to-br from-green-50 to-green-100/50 text-[#16a34a] shadow-lg shadow-green-500/10 scale-[1.02]'
-                      : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50 hover:shadow-md hover:scale-[1.01] active:scale-[0.98]'
+                      ? 'border-[#16a34a] bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-900/30 dark:to-green-800/20 text-[#16a34a] shadow-lg shadow-green-500/10 scale-[1.02]'
+                      : 'border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-md hover:scale-[1.01] active:scale-[0.98]'
                   }`}
                 >
                   <span className="text-xl mb-1 block transition-transform duration-200 group-hover:scale-110">{cat.icon}</span>
@@ -196,8 +211,8 @@ export default function ReportarPage() {
 
           {/* Location */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'location' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <MapPin className="w-4 h-4" strokeWidth={2} />
               </div>
               Local
@@ -216,8 +231,8 @@ export default function ReportarPage() {
 
           {/* Contact */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'contact' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <Mail className="w-4 h-4" strokeWidth={2} />
               </div>
               Email para contato
@@ -235,15 +250,15 @@ export default function ReportarPage() {
 
           {/* Photo */}
           <div className="animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
-              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 text-slate-400'}`}>
+            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${focusedField === 'photo' ? 'bg-[#16a34a] text-white shadow-lg shadow-green-500/25' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'}`}>
                 <Camera className="w-4 h-4" strokeWidth={2} />
               </div>
-              Foto <span className="text-slate-400 font-normal">(opcional)</span>
+              Foto <span className="text-slate-400 dark:text-slate-500 font-normal">(opcional)</span>
             </label>
             {photo ? (
               <div className="relative inline-block group">
-                <img src={photo} alt="Preview" className="h-40 rounded-2xl object-cover ring-4 ring-slate-100 group-hover:ring-green-100 transition-all duration-300" />
+                <img src={photo} alt="Preview" className="h-40 rounded-2xl object-cover ring-4 ring-slate-100 dark:ring-slate-700 group-hover:ring-green-100 dark:group-hover:ring-green-800 transition-all duration-300" />
                 <button
                   type="button"
                   onClick={() => setPhoto(null)}
@@ -257,17 +272,17 @@ export default function ReportarPage() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="group w-full px-4 py-10 rounded-2xl border-2 border-dashed border-slate-200 bg-white hover:border-[#16a34a] hover:bg-green-50/50 cursor-pointer transition-all duration-300"
+                className="group w-full px-4 py-10 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-[#16a34a] hover:bg-green-50/50 dark:hover:bg-green-900/20 cursor-pointer transition-all duration-300"
               >
                 <div className="flex flex-col items-center gap-3">
-                  <div className="w-14 h-14 rounded-2xl bg-slate-100 group-hover:bg-green-100 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    <Upload className="w-6 h-6 text-slate-400 group-hover:text-[#16a34a] transition-colors duration-300" strokeWidth={2} />
+                  <div className="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-700 group-hover:bg-green-100 dark:group-hover:bg-green-900/30 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <Upload className="w-6 h-6 text-slate-400 dark:text-slate-500 group-hover:text-[#16a34a] transition-colors duration-300" strokeWidth={2} />
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-700 group-hover:text-[#16a34a] transition-colors duration-300">
+                    <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-[#16a34a] transition-colors duration-300">
                       Clique para adicionar foto
                     </p>
-                    <p className="text-xs text-slate-400 mt-1">PNG, JPG até 5MB</p>
+                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">PNG, JPG até 5MB</p>
                   </div>
                 </div>
               </button>

@@ -84,17 +84,17 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in duration-300"
+        className="absolute inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm animate-fade-in duration-300"
         onClick={handleClose}
       />
       
       {/* Modal */}
       <div className="relative w-full max-w-md animate-modal-in">
-        <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/20 border border-white/50 overflow-hidden">
+        <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/20 border border-white/50 dark:border-slate-700/50 overflow-hidden">
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-slate-200 hover:text-slate-600 hover:scale-110 active:scale-95 transition-all duration-200 z-10"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-400 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-600 hover:text-slate-600 dark:hover:text-white hover:scale-110 active:scale-95 transition-all duration-200 z-10"
           >
             <X className="w-4 h-4" strokeWidth={2.5} />
           </button>
@@ -108,8 +108,8 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                   <CheckCircle className="w-10 h-10 text-white" strokeWidth={1.5} />
                 </div>
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Bem-vindo!</h3>
-              <p className="text-sm text-slate-500">Redirecionando...</p>
+              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Bem-vindo!</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400">Redirecionando...</p>
             </div>
           )}
 
@@ -123,11 +123,11 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                     <Sparkles className="w-9 h-9 text-white" strokeWidth={2} />
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">Achados & Perdidos</h2>
-                <p className="text-sm text-slate-500">Colégio Batista Nova Betânia</p>
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">Achados & Perdidos</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Colégio Batista Nova Betânia</p>
               </div>
 
-              <p className="text-center text-slate-600 mb-6 text-sm">
+              <p className="text-center text-slate-600 dark:text-slate-300 mb-6 text-sm">
                 Você já está cadastrado no sistema?
               </p>
 
@@ -142,7 +142,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                 </button>
                 <button
                   onClick={() => setStep('register')}
-                  className="w-full py-4 rounded-2xl bg-white text-slate-700 font-semibold text-base border-2 border-slate-200 hover:border-[#16a34a] hover:bg-green-50 hover:text-[#16a34a] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3"
+                  className="w-full py-4 rounded-2xl bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-base border-2 border-slate-200 dark:border-slate-600 hover:border-[#16a34a] hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-[#16a34a] dark:hover:text-green-400 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3"
                 >
                   <User className="w-5 h-5" />
                   Não, quero me cadastrar
@@ -151,7 +151,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
 
               <button
                 onClick={handleClose}
-                className="w-full mt-4 py-2 text-sm text-slate-400 hover:text-slate-600 transition-colors duration-200"
+                className="w-full mt-4 py-2 text-sm text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
               >
                 Pular por agora
               </button>
@@ -165,41 +165,41 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#16a34a] to-[#15803d] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/25">
                   <Lock className="w-6 h-6 text-white" strokeWidth={2} />
                 </div>
-                <h2 className="text-xl font-bold text-slate-900">Entrar</h2>
-                <p className="text-sm text-slate-500 mt-1">Use seu email e senha</p>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Entrar</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Use seu email e senha</p>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700">Email</label>
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Email</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" strokeWidth={2} />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="seu@email.com"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 dark:focus:ring-green-900/30 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700">Senha</label>
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Senha</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" strokeWidth={2} />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Sua senha"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 dark:focus:ring-green-900/30 focus:outline-none transition-all duration-200"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
                     >
                       {showPassword ? <Lock className="w-4 h-4" strokeWidth={2} /> : <Lock className="w-4 h-4" strokeWidth={2} />}
                     </button>
@@ -207,7 +207,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                 </div>
 
                 {error && (
-                  <p className="text-red-500 text-sm font-medium animate-shake flex items-center gap-2">
+                  <p className="text-red-500 dark:text-red-400 text-sm font-medium animate-shake flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                     {error}
                   </p>
@@ -224,11 +224,11 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
               <div className="flex items-center gap-3 mt-6">
                 <button
                   onClick={() => { setStep('ask'); setError(''); setEmail(''); setPassword('') }}
-                  className="text-sm text-slate-500 hover:text-[#16a34a] transition-colors duration-200"
+                  className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#16a34a] transition-colors duration-200"
                 >
                   ← Voltar
                 </button>
-                <span className="text-slate-300">·</span>
+                <span className="text-slate-300 dark:text-slate-600">·</span>
                 <button
                   onClick={() => { setStep('register'); setError('') }}
                   className="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors duration-200"
@@ -246,68 +246,68 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#16a34a] to-[#15803d] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/25">
                   <User className="w-6 h-6 text-white" strokeWidth={2} />
                 </div>
-                <h2 className="text-xl font-bold text-slate-900">Cadastrar</h2>
-                <p className="text-sm text-slate-500 mt-1">Crie sua conta gratuita</p>
+                <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100">Cadastrar</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Crie sua conta gratuita</p>
               </div>
 
               <form onSubmit={handleRegister} className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700">Nome completo</label>
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Nome completo</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" strokeWidth={2} />
                     <input
                       type="text"
                       required
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Seu nome"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 dark:focus:ring-green-900/30 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700">Email</label>
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Email</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" strokeWidth={2} />
                     <input
                       type="email"
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="seu@email.com"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 dark:focus:ring-green-900/30 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700">Turma <span className="text-slate-400 font-normal">(opcional)</span></label>
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Turma <span className="text-slate-400 dark:text-slate-500 font-normal">(opcional)</span></label>
                   <div className="relative">
-                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" strokeWidth={2} />
                     <input
                       type="text"
                       value={className}
                       onChange={(e) => setClassName(e.target.value)}
                       placeholder="Ex: 3° ano A"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 dark:focus:ring-green-900/30 focus:outline-none transition-all duration-200"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-semibold text-slate-700">Senha</label>
+                  <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Senha</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={2} />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" strokeWidth={2} />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Mínimo 4 caracteres"
-                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:outline-none transition-all duration-200"
+                      className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 dark:focus:ring-green-900/30 focus:outline-none transition-all duration-200"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors duration-200"
                     >
                       {showPassword ? <Lock className="w-4 h-4" strokeWidth={2} /> : <Lock className="w-4 h-4" strokeWidth={2} />}
                     </button>
@@ -315,7 +315,7 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
                 </div>
 
                 {error && (
-                  <p className="text-red-500 text-sm font-medium animate-shake flex items-center gap-2">
+                  <p className="text-red-500 dark:text-red-400 text-sm font-medium animate-shake flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
                     {error}
                   </p>
@@ -332,11 +332,11 @@ export default function AuthPopup({ onAuth }: AuthPopupProps) {
               <div className="flex items-center gap-3 mt-6">
                 <button
                   onClick={() => { setStep('ask'); setError(''); setEmail(''); setPassword(''); setName(''); setClassName('') }}
-                  className="text-sm text-slate-500 hover:text-[#16a34a] transition-colors duration-200"
+                  className="text-sm text-slate-500 dark:text-slate-400 hover:text-[#16a34a] transition-colors duration-200"
                 >
                   ← Voltar
                 </button>
-                <span className="text-slate-300">·</span>
+                <span className="text-slate-300 dark:text-slate-600">·</span>
                 <button
                   onClick={() => { setStep('login'); setError('') }}
                   className="text-sm text-[#16a34a] hover:text-[#15803d] font-medium transition-colors duration-200"

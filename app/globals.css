@@ -157,11 +157,21 @@
   border-radius: 8px;
 }
 
+.dark .skeleton {
+  background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+  background-size: 200% 100%;
+}
+
 .skeleton-text {
   background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: 4px;
+}
+
+.dark .skeleton-text {
+  background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+  background-size: 200% 100%;
 }
 
 /* Delay Utilities */
@@ -185,6 +195,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body,
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f1f5f9;
 }
 
 input, textarea, select {
@@ -210,6 +227,20 @@ input:focus, textarea:focus, select:focus {
   --text-muted: #64748b;
 }
 
+.dark {
+  --primary: #22c55e;
+  --primary-dark: #16a34a;
+  --primary-light: #4ade80;
+  --primary-50: #052e16;
+  --primary-100: #14532d;
+  --bg: #0f172a;
+  --bg-secondary: #1e293b;
+  --border: #334155;
+  --text: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -225,14 +256,27 @@ input:focus, textarea:focus, select:focus {
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }
 
 /* Selection Color */
 ::selection {
   background-color: rgba(22, 163, 74, 0.15);
   color: #166534;
+}
+
+.dark ::selection {
+  background-color: rgba(34, 197, 94, 0.25);
+  color: #86efac;
 }
 
 /* Focus Visible */
@@ -243,15 +287,23 @@ input:focus, textarea:focus, select:focus {
 }
 
 /* ============================================
-   GLOBAL TRANSITIONS — Smooth, fast
+   GLOBAL TRANSITIONS — Fluid, exponential
    ============================================ */
 
 button, a {
-  transition: all 0.2s ease-out;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 input, textarea, select {
-  transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button, a, input, textarea, select {
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ============================================
@@ -263,8 +315,16 @@ input, textarea, select {
   transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
 }
 
+.dark .input-premium {
+  @apply border-slate-700 bg-slate-800 text-slate-100 placeholder-slate-500;
+}
+
 .input-premium:hover {
   border-color: #cbd5e1;
+}
+
+.dark .input-premium:hover {
+  border-color: #475569;
 }
 
 .input-premium:focus {
@@ -273,25 +333,39 @@ input, textarea, select {
   outline: none;
 }
 
+.dark .input-premium:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+
 /* ============================================
-   PREMIUM BUTTONS
+   PREMIUM BUTTONS — Fluid interactions
    ============================================ */
 
 .btn-primary {
   @apply relative overflow-hidden inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl
     bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-semibold text-sm
     shadow-md shadow-green-500/20;
-  transition: all 0.2s ease-out;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.2s ease-out;
+}
+
+.dark .btn-primary {
+  @apply from-[#22c55e] to-[#16a34a] shadow-green-500/30;
 }
 
 .btn-primary:hover {
-  box-shadow: 0 8px 24px -4px rgba(22, 163, 74, 0.35);
-  transform: translateY(-1px);
+  box-shadow: 0 12px 32px -4px rgba(22, 163, 74, 0.4);
+  transform: translateY(-2px);
+  filter: brightness(1.08);
 }
 
 .btn-primary:active {
-  transform: translateY(0) scale(0.98);
-  box-shadow: 0 4px 12px -2px rgba(22, 163, 74, 0.25);
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 2px 8px -1px rgba(22, 163, 74, 0.3);
+  filter: brightness(0.95);
+  transition-duration: 0.1s;
 }
 
 .btn-primary:disabled {
@@ -299,15 +373,16 @@ input, textarea, select {
   cursor: not-allowed;
   transform: none;
   box-shadow: 0 4px 12px -2px rgba(22, 163, 74, 0.15);
+  filter: none;
 }
 
 .btn-primary::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 60%);
   opacity: 0;
-  transition: opacity 0.2s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 
 .btn-primary:hover::before {
@@ -318,18 +393,31 @@ input, textarea, select {
   @apply relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl
     bg-white text-slate-700 font-semibold text-sm
     border border-slate-200;
-  transition: all 0.2s ease-out;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease-out,
+              border-color 0.2s ease-out;
+}
+
+.dark .btn-secondary {
+  @apply bg-slate-800 text-slate-200 border-slate-700;
+}
+
+.dark .btn-secondary:hover {
+  @apply bg-slate-700 border-slate-600;
 }
 
 .btn-secondary:hover {
   background: #f8fafc;
   border-color: #cbd5e1;
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 16px -2px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
 
 .btn-secondary:active {
   transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.06);
+  transition-duration: 0.1s;
 }
 
 /* ============================================
@@ -341,6 +429,10 @@ input, textarea, select {
   transition: all 0.25s ease-out;
 }
 
+.dark .card {
+  @apply bg-slate-800 border-slate-700;
+}
+
 .card-hover {
   @apply card;
 }
@@ -349,6 +441,11 @@ input, textarea, select {
   box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.04);
   transform: translateY(-2px);
   border-color: #e2e8f0;
+}
+
+.dark .card-hover:hover {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.3), 0 2px 8px -2px rgba(0, 0, 0, 0.2);
+  border-color: #475569;
 }
 
 /* ============================================
@@ -362,6 +459,11 @@ input, textarea, select {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.dark .glass {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
 /* ============================================
    GRADIENT TEXT
    ============================================ */
@@ -370,6 +472,12 @@ input, textarea, select {
   background: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #166534 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .gradient-text {
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
+  -webkit-background-clip: text;
   background-clip: text;
 }
 
@@ -392,6 +500,10 @@ input, textarea, select {
 
 .skeleton-card {
   @apply bg-white rounded-2xl border border-slate-100 overflow-hidden;
+}
+
+.dark .skeleton-card {
+  @apply bg-slate-800 border-slate-700;
 }
 
 .skeleton-card .skeleton-image {

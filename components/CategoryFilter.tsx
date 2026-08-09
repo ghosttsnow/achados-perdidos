@@ -25,7 +25,7 @@ export default function CategoryFilter({ selected, onChange }: CategoryFilterPro
             className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 ease-out ${
               isActive
                 ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-md shadow-green-500/20 scale-[1.02]'
-                : 'bg-white text-slate-600 border border-slate-200 hover:border-green-200 hover:bg-green-50 hover:text-[#16a34a] hover:shadow-sm hover:scale-[1.01] active:scale-[0.98]'
+                : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-600 hover:border-green-200 dark:hover:border-green-700 hover:bg-green-50 dark:hover:bg-green-900/20 hover:text-[#16a34a] dark:hover:text-green-400 hover:shadow-sm hover:scale-[1.01] active:scale-[0.98]'
             }`}
           >
             <span className="text-base transition-transform duration-200">{cat.emoji}</span>
