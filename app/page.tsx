@@ -199,7 +199,7 @@ export default function HomePage() {
           {/* Background Glow */}
           <div className="absolute inset-0 -z-10 overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-green-400/8 via-green-300/5 to-transparent rounded-full blur-3xl animate-float" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-green-500/5 rounded-full blur-3xl animate-float delay-300" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-green-500/5 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
           </div>
 
           {/* Logo + Title Unified */}
@@ -208,17 +208,17 @@ export default function HomePage() {
               <img
                 src="/logo-colegio.png"
                 alt="Colégio Batista Nova Betânia"
-                className="h-32 sm:h-40 w-auto mx-auto drop-shadow-xl group-hover:scale-110 group-hover:drop-shadow-2xl transition-all duration-700 cubic-bezier(0.34, 1.56, 0.64, 1)"
+                className="h-32 sm:h-40 w-auto mx-auto drop-shadow-xl group-hover:scale-105 transition-transform duration-500 ease-out"
               />
-              <div className="absolute -inset-8 bg-gradient-to-b from-green-400/15 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out" />
+              <div className="absolute -inset-8 bg-gradient-to-b from-green-400/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
             </div>
           </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-4 animate-fade-in-up delay-100">
             Encontre seus{' '}
             <span className="relative inline-block group cursor-pointer">
-              <span className="gradient-text group-hover:tracking-wide transition-all duration-500">pertences</span>
-              <svg className="absolute -bottom-2 left-0 w-full transition-all duration-500 group-hover:-bottom-3" viewBox="0 0 200 12" fill="none">
+              <span className="gradient-text">pertences</span>
+              <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
                 <path d="M2 8C40 3 80 2 100 4C120 6 160 8 198 3" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </span>
@@ -231,23 +231,23 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up delay-300">
             <Link
               href="/reportar"
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-bold text-base shadow-xl shadow-green-500/25 hover:shadow-2xl hover:shadow-green-500/40 hover:scale-[1.03] active:scale-[0.97] transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-bold text-base shadow-xl shadow-green-500/25 hover:shadow-2xl hover:shadow-green-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-400 ease-out"
             >
-              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" strokeWidth={2.5} />
+              <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500 ease-out" strokeWidth={2.5} />
               Reportar Item
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300 ease-out" />
             </Link>
             <button
               onClick={() => searchRef.current?.focus()}
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white text-slate-700 font-bold text-base border-2 border-slate-200 hover:border-green-300 hover:bg-green-50 hover:text-[#16a34a] hover:shadow-xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1)"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white text-slate-700 font-bold text-base border-2 border-slate-200 hover:border-green-300 hover:bg-green-50 hover:text-[#16a34a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-400 ease-out"
             >
-              <Search className="w-5 h-5 group-hover:rotate-12 transition-transform duration-500" />
+              <Search className="w-5 h-5 group-hover:rotate-12 transition-transform duration-400 ease-out" />
               Buscar Itens
             </button>
           </div>
 
           <div className="mt-10 animate-fade-in-up delay-400">
-            <ChevronDown className="w-6 h-6 text-slate-300 mx-auto animate-bounce-subtle" />
+            <ChevronDown className="w-5 h-5 text-slate-300 mx-auto animate-bounce-subtle" />
           </div>
         </div>
 
@@ -256,20 +256,20 @@ export default function HomePage() {
           {stats.map((stat, idx) => (
             <div
               key={stat.label}
-              className={`${stat.bg} ${stat.border} border rounded-2xl p-4 sm:p-5 text-center transition-all duration-500 hover:scale-[1.05] hover:shadow-xl cursor-default group hover-lift`}
+              className={`${stat.bg} ${stat.border} border rounded-2xl p-4 sm:p-5 text-center transition-all duration-400 ease-out hover:scale-[1.03] hover:shadow-lg cursor-default group`}
             >
-              <div className={`text-3xl sm:text-4xl font-bold ${stat.color} mb-1 transition-transform duration-500 group-hover:scale-110`}>
+              <div className={`text-3xl sm:text-4xl font-bold ${stat.color} mb-1 transition-transform duration-400 ease-out group-hover:scale-105`}>
                 <AnimatedCounter value={stat.value} delay={idx * 100} />
               </div>
-              <p className="text-xs sm:text-sm font-medium text-slate-500 group-hover:text-slate-700 transition-colors duration-300">{stat.label}</p>
+              <p className="text-xs sm:text-sm font-medium text-slate-500 group-hover:text-slate-700 transition-colors duration-300 ease-out">{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Search */}
         <div className="max-w-2xl mx-auto mb-8 animate-fade-in-up delay-500">
-          <div className={`relative transition-all duration-500 ${searchFocused ? 'scale-[1.03]' : ''}`}>
-            <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-all duration-500 ${searchFocused ? 'text-[#16a34a] scale-110' : 'text-slate-400'}`} strokeWidth={2} />
+          <div className={`relative transition-all duration-400 ease-out ${searchFocused ? 'scale-[1.02]' : ''}`}>
+            <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-all duration-400 ease-out ${searchFocused ? 'text-[#16a34a]' : 'text-slate-400'}`} strokeWidth={2} />
             <input
               ref={searchRef}
               type="text"
@@ -278,14 +278,14 @@ export default function HomePage() {
               onFocus={() => setSearchFocused(true)}
               onBlur={() => setSearchFocused(false)}
               placeholder="Buscar por título, descrição ou local..."
-              className="w-full pl-12 pr-12 py-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:shadow-xl focus:outline-none transition-all duration-500"
+              className="w-full pl-12 pr-12 py-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-900 placeholder-slate-400 focus:border-[#16a34a] focus:ring-4 focus:ring-green-50 focus:shadow-lg focus:outline-none transition-all duration-400 ease-out"
             />
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-red-100 hover:text-red-500 hover:rotate-90 hover:scale-110 active:scale-95 transition-all duration-500"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 hover:bg-red-100 hover:text-red-500 hover:scale-110 active:scale-95 transition-all duration-300 ease-out"
               >
-                <X className="w-4 h-4" strokeWidth={2.5} />
+                <X className="w-3.5 h-3.5" strokeWidth={2.5} />
               </button>
             )}
           </div>
