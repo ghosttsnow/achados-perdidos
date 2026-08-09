@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOpen, X, Search, TrendingUp, AlertTriangle, ClipboardCheck, ArrowLeft } from 'lucide-react'
+import { CheckCircle, Package, LogOut, Plus, Send, Upload, Shirt, Laptop, BookOpen, X, Search, TrendingUp, AlertTriangle, ClipboardCheck, ArrowLeft, Trash2 } from 'lucide-react'
 import { getItems, updateItemStatus, createNotification, createItem, clearAll } from '@/lib/storage'
 import { useRouter } from 'next/navigation'
 import StatusBadge from '@/components/StatusBadge'
@@ -223,6 +223,7 @@ export default function AdminPage() {
               onClick={handleClearAll}
               className="group inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-600 bg-slate-100 hover:bg-orange-50 hover:text-orange-600 hover:shadow-md transition-all duration-200 hover:scale-105"
             >
+              <Trash2 className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" strokeWidth={2} />
               <span className="hidden sm:inline">Limpar Tudo</span>
             </button>
             <button
