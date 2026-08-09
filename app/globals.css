@@ -118,27 +118,27 @@
 
 /* Animation Classes */
 .animate-fade-in-up {
-  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
 .animate-fade-in {
-  animation: fade-in 0.4s ease-out forwards;
+  animation: fade-in 0.5s ease-out forwards;
   opacity: 0;
 }
 
 .animate-slide-in-left {
-  animation: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slide-in-left 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
 .animate-slide-in-right {
-  animation: slide-in-right 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slide-in-right 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
 .animate-scale-in {
-  animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scale-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
@@ -170,26 +170,26 @@
 }
 
 .animate-dropdown-in {
-  animation: dropdown-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: dropdown-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   transform-origin: top right;
 }
 
 .animate-dropdown-out {
-  animation: dropdown-out 0.15s ease-in forwards;
+  animation: dropdown-out 0.2s ease-in forwards;
   transform-origin: top right;
 }
 
 .animate-slide-down {
-  animation: slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   overflow: hidden;
 }
 
 .animate-shake {
-  animation: shake 0.4s ease-in-out;
+  animation: shake 0.5s ease-in-out;
 }
 
 .animate-bounce-in {
-  animation: bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  animation: bounce-in 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   opacity: 0;
 }
 
@@ -203,6 +203,68 @@
 
 .animate-particle {
   animation: particle-float 3s ease-in-out infinite;
+}
+
+/* Smooth Page Transitions */
+.page-transition {
+  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hover Lift Effect */
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+/* Smooth Scale */
+.smooth-scale {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.smooth-scale:hover {
+  transform: scale(1.05);
+}
+
+.smooth-scale:active {
+  transform: scale(0.98);
+}
+
+/* Glow on Hover */
+.glow-hover {
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.glow-hover:hover {
+  box-shadow: 0 0 30px rgba(22, 163, 74, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Slide Up on Hover */
+.slide-up-hover {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+}
+
+.slide-up-hover:hover {
+  transform: translateY(-4px);
+}
+
+/* Color Shift */
+.color-shift {
+  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Smooth Border */
+.smooth-border {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.smooth-border:hover {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 /* Delay Utilities */

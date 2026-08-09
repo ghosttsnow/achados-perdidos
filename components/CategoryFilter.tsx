@@ -16,22 +16,23 @@ interface CategoryFilterProps {
 export default function CategoryFilter({ selected, onChange }: CategoryFilterProps) {
   return (
     <div className="flex flex-wrap justify-center gap-2 sm:gap-3">
-      {categories.map((cat) => {
+      {categories.map((cat, idx) => {
         const isActive = selected === cat.value
         return (
           <button
             key={cat.value}
             onClick={() => onChange(cat.value)}
-            className={`group inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${
+            className={`group inline-flex items-center gap-2 px-5 sm:px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-500 cubic-bezier(0.34, 1.56, 0.64, 1) ${
               isActive
-                ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-lg shadow-green-500/25 scale-[1.02]'
-                : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:scale-[1.01]'
+                ? 'bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white shadow-xl shadow-green-500/30 scale-105'
+                : 'bg-white text-slate-600 border-2 border-slate-200 hover:border-green-300 hover:bg-green-50 hover:text-[#16a34a] hover:shadow-lg hover:scale-105'
             }`}
+            style={{ animationDelay: `${idx * 50}ms` }}
           >
-            <span className={`text-base transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+            <span className={`text-lg transition-all duration-500 ${isActive ? 'scale-125 rotate-12' : 'group-hover:scale-125 group-hover:rotate-12'}`}>
               {cat.emoji}
             </span>
-            {cat.label}
+            <span className="transition-all duration-300">{cat.label}</span>
           </button>
         )
       })}
