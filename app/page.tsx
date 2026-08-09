@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
-import { Search, Plus, Shield, Package, X, ArrowRight, Sparkles, ChevronDown } from 'lucide-react'
+import { useEffect, useState, useRef, useCallback } from 'react'
+import { Search, Plus, Shield, X, ArrowRight, Sparkles, ChevronDown, LogOut } from 'lucide-react'
 import Link from 'next/link'
-import { getItems } from '@/lib/storage'
+import { getItems, getSession, clearSession, StoredUser } from '@/lib/storage'
 import ItemCard from '@/components/ItemCard'
 import CategoryFilter from '@/components/CategoryFilter'
+import AuthPopup from '@/components/AuthPopup'
 
 interface Item {
   id: string
@@ -53,7 +54,10 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('todos')
   const [loaded, setLoaded] = useState(false)
   const [searchFocused, setSearchFocused] = useState(false)
+  const [user, setUser] = useState<StoredUser | null>(null)
+  const [showUserMenu, setShowUserMenu] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
 
   const fetchItems = () => {
     const all = getItems()
@@ -63,6 +67,32 @@ export default function HomePage() {
   }
 
   useEffect(() => { fetchItems() }, [])
+
+  useEffect(() => {
+    const session = getSession()
+    if (session) setUser(session)
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowUserMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  const handleAuth = useCallback((u: StoredUser) => {
+    setUser(u)
+  }, [])
+
+  const handleLogout = () => {
+    clearSession()
+    setUser(null)
+    setShowUserMenu(false)
+    localStorage.removeItem('cbn_auth_asked')
+  }
 
   useEffect(() => {
     let result = items
@@ -81,28 +111,36 @@ export default function HomePage() {
   }, [search, selectedCategory, items])
 
   const stats = [
-    { label: 'Perdidos', value: items.filter(i => i.status === 'perdido').length, color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-100', icon: 'lost' },
-    { label: 'Encontrados', value: items.filter(i => i.status === 'encontrado').length, color: 'text-[#16a34a]', bg: 'bg-green-50', border: 'border-green-100', icon: 'found' },
-    { label: 'Devolvidos', value: items.filter(i => i.status === 'devolvido').length, color: 'text-[#2563eb]', bg: 'bg-blue-50', border: 'border-blue-100', icon: 'returned' },
+    { label: 'Perdidos', value: items.filter(i => i.status === 'perdido').length, color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-100' },
+    { label: 'Encontrados', value: items.filter(i => i.status === 'encontrado').length, color: 'text-[#16a34a]', bg: 'bg-green-50', border: 'border-green-100' },
+    { label: 'Devolvidos', value: items.filter(i => i.status === 'devolvido').length, color: 'text-[#2563eb]', bg: 'bg-blue-50', border: 'border-blue-100' },
   ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30">
+      {/* Auth Popup */}
+      <AuthPopup onAuth={handleAuth} />
+
       {/* Header */}
       <header className="sticky top-0 z-50 glass border-b border-white/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-[#16a34a] to-[#15803d] flex items-center justify-center shadow-lg shadow-green-500/30 group-hover:shadow-xl group-hover:shadow-green-500/40 transition-all duration-300 group-hover:scale-105">
-                <Package className="w-5 h-5 text-white" strokeWidth={2.5} />
-                <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative h-10 w-auto">
+                <img
+                  src="/logo-colegio.png"
+                  alt="Colégio Batista Nova Betânia"
+                  className="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+                />
               </div>
               <div className="hidden sm:block">
                 <h1 className="text-base font-bold text-slate-900 tracking-tight group-hover:text-[#16a34a] transition-colors duration-200">Achados & Perdidos</h1>
                 <p className="text-[11px] text-slate-400 font-medium -mt-0.5">Colégio Batista Nova Betânia</p>
               </div>
-            </div>
+            </Link>
 
+            {/* Actions */}
             <div className="flex items-center gap-2">
               <Link
                 href="/reportar"
@@ -119,6 +157,37 @@ export default function HomePage() {
               >
                 <Shield className="w-4 h-4" strokeWidth={2} />
               </Link>
+
+              {/* User Menu */}
+              {user && user.id !== 'guest' && (
+                <div className="relative" ref={menuRef}>
+                  <button
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-xl bg-green-50 border border-green-100 text-[#16a34a] text-sm font-medium hover:bg-green-100 hover:shadow-md transition-all duration-300 hover:scale-[1.02]"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#16a34a] to-[#15803d] flex items-center justify-center text-white text-xs font-bold">
+                      {user.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="hidden sm:inline">{user.name.split(' ')[0]}</span>
+                  </button>
+                  
+                  {showUserMenu && (
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-200/60 border border-white/50 p-2 animate-dropdown-in">
+                      <div className="px-3 py-2 border-b border-slate-100 mb-1">
+                        <p className="text-sm font-semibold text-slate-900">{user.name}</p>
+                        <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200"
+                      >
+                        <LogOut className="w-4 h-4" strokeWidth={2} />
+                        Sair da conta
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -131,28 +200,37 @@ export default function HomePage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-400/10 rounded-full blur-3xl animate-pulse-glow" />
           </div>
           
-          <div className="animate-fade-in-up">
+          {/* Logo do Colégio */}
+          <div className="animate-fade-in-up mb-8">
+            <img
+              src="/logo-colegio.png"
+              alt="Colégio Batista Nova Betânia"
+              className="h-28 sm:h-36 w-auto mx-auto drop-shadow-lg hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+
+          <div className="animate-fade-in-up delay-100">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 border border-green-100 text-green-700 text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4" />
               Sistema de Achados e Perdidos
             </div>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight mb-4 animate-fade-in-up delay-100">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight mb-4 animate-fade-in-up delay-200">
             Encontre seus{' '}
             <span className="relative inline-block">
               <span className="gradient-text">pertences</span>
               <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none">
-                <path d="M2 8C40 3 80 2 100 4C120 6 160 8 198 3" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" className="animate-draw" />
+                <path d="M2 8C40 3 80 2 100 4C120 6 160 8 198 3" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </span>
           </h2>
           
-          <p className="text-slate-500 text-lg max-w-md mx-auto mb-8 animate-fade-in-up delay-200">
+          <p className="text-slate-500 text-lg max-w-md mx-auto mb-8 animate-fade-in-up delay-300">
             Ajude a recuperar o que foi perdido na escola
           </p>
 
-          <div className="flex items-center justify-center gap-3 animate-fade-in-up delay-300">
+          <div className="flex items-center justify-center gap-3 animate-fade-in-up delay-400">
             <Link
               href="/reportar"
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-semibold text-sm shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
@@ -170,13 +248,13 @@ export default function HomePage() {
             </button>
           </div>
 
-          <div className="mt-8 animate-fade-in-up delay-400">
+          <div className="mt-8 animate-fade-in-up delay-500">
             <ChevronDown className="w-5 h-5 text-slate-300 mx-auto animate-bounce-subtle" />
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-10 max-w-2xl mx-auto animate-fade-in-up delay-300">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4 mb-10 max-w-2xl mx-auto animate-fade-in-up delay-400">
           {stats.map((stat, idx) => (
             <div
               key={stat.label}
@@ -191,7 +269,7 @@ export default function HomePage() {
         </div>
 
         {/* Search */}
-        <div className="max-w-2xl mx-auto mb-8 animate-fade-in-up delay-400">
+        <div className="max-w-2xl mx-auto mb-8 animate-fade-in-up delay-500">
           <div className={`relative transition-all duration-300 ${searchFocused ? 'scale-[1.02]' : ''}`}>
             <Search className={`absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 transition-colors duration-200 ${searchFocused ? 'text-[#16a34a]' : 'text-slate-400'}`} strokeWidth={2} />
             <input
@@ -265,13 +343,15 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="mt-16 border-t border-slate-100 bg-white/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 text-slate-400 text-sm">
-              <Package className="w-4 h-4" />
-              <span>Colégio Batista Nova Betânia</span>
-              <span className="text-slate-300">·</span>
-              <span>Achados & Perdidos</span>
-            </div>
+          <div className="flex flex-col items-center gap-4">
+            <img
+              src="/logo-colegio.png"
+              alt="Colégio Batista Nova Betânia"
+              className="h-12 w-auto opacity-60"
+            />
+            <p className="text-sm text-slate-400">
+              Colégio Batista Nova Betânia · Achados & Perdidos
+            </p>
           </div>
         </div>
       </footer>
