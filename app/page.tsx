@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
-import { Search, Plus, Shield, X, ArrowRight, Sparkles, ChevronDown, LogOut } from 'lucide-react'
+import { Search, Plus, Shield, X, ArrowRight, ChevronDown, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { getItems, getSession, clearSession, StoredUser } from '@/lib/storage'
 import ItemCard from '@/components/ItemCard'
@@ -195,28 +195,26 @@ export default function HomePage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
         {/* Hero Section */}
-        <div className="relative text-center mb-12 sm:mb-16">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-green-400/10 rounded-full blur-3xl animate-pulse-glow" />
-          </div>
-          
-          {/* Logo do Colégio */}
-          <div className="animate-fade-in-up mb-8">
-            <img
-              src="/logo-colegio.png"
-              alt="Colégio Batista Nova Betânia"
-              className="h-28 sm:h-36 w-auto mx-auto drop-shadow-lg hover:scale-105 transition-transform duration-500"
-            />
+        <div className="relative text-center mb-12 sm:mb-16 py-8">
+          {/* Background Glow */}
+          <div className="absolute inset-0 -z-10 overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-green-400/8 via-green-300/5 to-transparent rounded-full blur-3xl" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-green-500/5 rounded-full blur-3xl" />
           </div>
 
-          <div className="animate-fade-in-up delay-100">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 border border-green-100 text-green-700 text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              Sistema de Achados e Perdidos
+          {/* Logo + Title Unified */}
+          <div className="animate-fade-in-up mb-6">
+            <div className="relative inline-block group">
+              <img
+                src="/logo-colegio.png"
+                alt="Colégio Batista Nova Betânia"
+                className="h-32 sm:h-40 w-auto mx-auto drop-shadow-xl group-hover:scale-105 transition-all duration-700 ease-out"
+              />
+              <div className="absolute -inset-8 bg-gradient-to-b from-green-400/10 to-transparent rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             </div>
           </div>
 
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 tracking-tight mb-4 animate-fade-in-up delay-200">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight mb-4 animate-fade-in-up delay-100">
             Encontre seus{' '}
             <span className="relative inline-block">
               <span className="gradient-text">pertences</span>
@@ -226,29 +224,29 @@ export default function HomePage() {
             </span>
           </h2>
           
-          <p className="text-slate-500 text-lg max-w-md mx-auto mb-8 animate-fade-in-up delay-300">
+          <p className="text-slate-500 text-lg sm:text-xl max-w-lg mx-auto mb-10 animate-fade-in-up delay-200 leading-relaxed">
             Ajude a recuperar o que foi perdido na escola
           </p>
 
-          <div className="flex items-center justify-center gap-3 animate-fade-in-up delay-400">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 animate-fade-in-up delay-300">
             <Link
               href="/reportar"
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-semibold text-sm shadow-lg shadow-green-500/25 hover:shadow-xl hover:shadow-green-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-gradient-to-r from-[#16a34a] to-[#15803d] text-white font-bold text-base shadow-xl shadow-green-500/25 hover:shadow-2xl hover:shadow-green-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" strokeWidth={2.5} />
               Reportar Item
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
             </Link>
             <button
               onClick={() => searchRef.current?.focus()}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-slate-700 font-semibold text-sm border border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl bg-white text-slate-700 font-bold text-base border-2 border-slate-200 hover:border-green-300 hover:bg-green-50 hover:text-[#16a34a] hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-5 h-5" />
               Buscar Itens
             </button>
           </div>
 
-          <div className="mt-8 animate-fade-in-up delay-500">
+          <div className="mt-10 animate-fade-in-up delay-400">
             <ChevronDown className="w-5 h-5 text-slate-300 mx-auto animate-bounce-subtle" />
           </div>
         </div>
