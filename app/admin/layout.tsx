@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Lock, ArrowLeft, Shield, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 
-const ADMIN_PASSWORD = 'achados2024'
+const ADMIN_PASSWORD = 'achados2026'
 
 export default function AdminLayout({
   children,
