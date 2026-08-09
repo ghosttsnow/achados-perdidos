@@ -348,7 +348,7 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-slate-100 bg-white/50">
+      <footer className="mt-16 border-t border-slate-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col items-center gap-4">
             <img
@@ -356,7 +356,7 @@ export default function HomePage() {
               alt="Colégio Batista Nova Betânia"
               className="h-12 w-auto opacity-60"
             />
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-400 dark:text-slate-500">
               Colégio Batista Nova Betânia · Achados & Perdidos
             </p>
           </div>
