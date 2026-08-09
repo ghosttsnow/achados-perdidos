@@ -129,11 +129,13 @@ export default function HomePage() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <img
-                src="/logo-colegio.png"
-                alt="Colégio Batista Nova Betânia"
-                className="h-10 w-auto object-contain group-hover:scale-105 transition-transform duration-200 mix-blend-multiply"
-              />
+              <div className="h-10 w-10 rounded-lg overflow-hidden bg-white flex-shrink-0">
+                <img
+                  src="/logo-colegio.png"
+                  alt="Colégio Batista Nova Betânia"
+                  className="h-full w-full object-contain group-hover:scale-105 transition-transform duration-200 mix-blend-multiply"
+                />
+              </div>
               <div className="hidden sm:block">
                 <h1 className="text-base font-bold text-slate-900 dark:text-slate-100 tracking-tight group-hover:text-[#16a34a] transition-colors duration-200">Achados & Perdidos</h1>
                 <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium -mt-0.5">Colégio Batista Nova Betânia</p>
@@ -215,11 +217,13 @@ export default function HomePage() {
 
           {/* Logo */}
           <div className="animate-fade-in-up mb-6">
-            <img
-              src="/logo-colegio.png"
-              alt="Colégio Batista Nova Betânia"
-              className="h-28 sm:h-36 w-auto mx-auto drop-shadow-sm mix-blend-multiply"
-            />
+            <div className="h-28 sm:h-36 w-28 sm:w-36 mx-auto rounded-2xl overflow-hidden bg-white flex items-center justify-center shadow-lg">
+              <img
+                src="/logo-colegio.png"
+                alt="Colégio Batista Nova Betânia"
+                className="h-24 sm:h-32 w-auto mix-blend-multiply"
+              />
+            </div>
           </div>
 
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight mb-4 animate-fade-in-up delay-75">
@@ -351,11 +355,13 @@ export default function HomePage() {
       <footer className="mt-16 border-t border-slate-100 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col items-center gap-4">
-            <img
-              src="/logo-colegio.png"
-              alt="Colégio Batista Nova Betânia"
-              className="h-12 w-auto opacity-60 mix-blend-multiply"
-            />
+            <div className="h-12 w-12 rounded-lg overflow-hidden bg-white flex items-center justify-center opacity-60">
+              <img
+                src="/logo-colegio.png"
+                alt="Colégio Batista Nova Betânia"
+                className="h-10 w-auto mix-blend-multiply"
+              />
+            </div>
             <p className="text-sm text-slate-400 dark:text-slate-500">
               Colégio Batista Nova Betânia · Achados & Perdidos
             </p>
